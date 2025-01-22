@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+  .btn {
+    @apply font-bold py-2 px-4 rounded;
+  }
+  .btn-blue {
+    @apply bg-blue-500 text-white;
+  }
+  .btn-blue:hover {
+    @apply bg-blue-700;
+  }
+
+
+/* Base styles for the item */
+.item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin: 5px 0;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+/* Styling for the item when selected */
+.item.selected {
+    background-color: #d1e7dd;
+    border-color: #0f5132;
+}
+
+/* Styling for the item when dragging */
+.item.dragging {
+    background-color: #f8d7da;
+    border-color: #842029;
+    opacity: 0.7;
+}
+
+/* Styling for the item when another item is dragged over it */
+.item.over {
+    background-color: #e2e3e5;
+    border-color: #adb5bd;
+}
+
+/* Styles for the drag handle */
+.drag-handle {
+    font-size: 18px;
+    margin-right: 10px;
+    cursor: grab;
+    user-select: none;
+    color: #6c757d;
+    transition: color 0.2s;
+}
+
+.drag-handle:hover {
+    color: #495057;
+}
+
+/* Content of the item */
+.item-content {
+    flex-grow: 1;
+    font-size: 14px;
+    color: #212529;
+    word-break: break-word;
+}
+
+/* Add hover effect for the item */
+.item:hover {
+    background-color: #f1f3f5;
+}
