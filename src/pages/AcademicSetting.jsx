@@ -46,7 +46,8 @@ const AcademicSetting = () => {
     
     const [isSettingsSidebarOpen, setIsSettingsSidebarOpen] = useState(false);
     
-     useEffect(() => {
+    useEffect(() => {
+         console.log("selected Items::", selectedItems)
     },[selectedItems])
 
 
@@ -206,11 +207,7 @@ const AcademicSetting = () => {
 
     const handleSaveHierarchy = async () => {
         try {
-            const orderedItems = academicItems
-                .filter(item => item.isSelected)
-                .map((item, index) => ({ ...item, order: index + 1 }));
-
-            const hierarchyData = orderedItems.map(item => item.name);
+            const hierarchyData = selectedItems.map(item => item.name);
             await api.saveHierarchy(instituteId, { hierarchy: hierarchyData });
             setHierarchy(hierarchyData);
             alert('Hierarchy saved successfully!');

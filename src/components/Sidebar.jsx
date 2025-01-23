@@ -1,7 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
 
-const Sidebar = ({ selectedItems, isSettingsSidebarOpen, toggleSettingsSidebar, isAcademicOpen, toggleAcademicDropdown }) => {
+const Sidebar = ({ selectedItems }) => {
+
+    const [isAcademicOpen, setIsAcademicOpen] = useState(false);
+    
+      const toggleAcademicDropdown = () => {
+        setIsAcademicOpen((prev) => !prev);
+    };
     return (
         <>
              <aside className="w-64 bg-gray-100 p-4 border-r border-gray-300 relative overflow-y-auto">
@@ -23,7 +29,9 @@ const Sidebar = ({ selectedItems, isSettingsSidebarOpen, toggleSettingsSidebar, 
                                                 key={item}
                                                 className="mb-2 cursor-pointer hover:text-blue-500"
                                             >
-                                                {item}
+                                                <Link to = {`/academic/${item.toLowerCase()}`}>
+                                                   {item}
+                                                </Link>
                                             </li>
                                         ))}
                                     </ul>
