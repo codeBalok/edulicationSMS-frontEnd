@@ -88,6 +88,11 @@ const api = {
     fetchAssessmentParent : () => http.get('assessment/list'),
     createAssessment : (data) => http.post('assessment', data),
     fetchAssessment: () => http.get('assessment'),
+
+    // Grading APi
+    fetchGradingParent : () => http.get('gradings/list'),
+    createGrading : (data) => http.post('gradings', data),
+    fetchGrading: () => http.get('gradings'),
     
     // Custom Fieldhttp://127.0.0.1:8000 API
     fetchCustomFields: () => axios.get('http://127.0.0.1:8000/api/custom-fields'),
@@ -141,11 +146,11 @@ const api = {
     // updateModule: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/modules/${id}`, data),
     // deleteModule: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/modules/${id}`),
 
-    fetchGradings: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/gradings`),
-    createGrading: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/gradings`, data),
-    fetchGrading: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/gradings/${id}`),
-    updateGrading: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/gradings/${id}`, data),
-    deleteGrading: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/gradings/${id}`),
+    // fetchGradings: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/gradings`),
+    // createGrading: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/gradings`, data),
+    // fetchGrading: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/gradings/${id}`),
+    // updateGrading: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/gradings/${id}`, data),
+    // deleteGrading: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/gradings/${id}`),
 
     // fetchDepartments: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/departments`),
     // createDepartment: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/departments`, data),

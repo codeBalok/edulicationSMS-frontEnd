@@ -57,6 +57,8 @@ import UnitList from "./pages/unit/UnitList";
 import Assessment from "./pages/assessment/Assessment";
 import AssessmentAdd from "./pages/assessment/AssessmentAdd";
 import AssessmentList from "./pages/assessment/AssessmentList";
+import GradingAdd from "./pages/grading/GradingAdd";
+import Grading from "./pages/grading/Grading";
 
 export const MainRouter = () => {
 
@@ -245,6 +247,18 @@ const router = createBrowserRouter([
   {
     path: "/academic/unit-list",
     element: <UnitList />,
+  },
+  {
+    path: "/academic/grading",
+    element: <Grading />,
+  },
+  {
+    path: "/academic/add-grading",
+    element: <GradingAdd />,
+  },
+  {
+    path: "/academic/assessment-list",
+    element: <AssessmentList />,
   },
   {
     path: "/academic/assessment",
