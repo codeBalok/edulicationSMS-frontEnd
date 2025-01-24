@@ -30,6 +30,33 @@ import CourseList from "./pages/course/CourseList";
 import Batch from "./pages/batch/Batch";
 import BatchAdd from "./pages/batch/BatchAdd";
 import BatchList from "./pages/batch/BatchList";
+import Session from "./pages/session/Session";
+import SessionAdd from "./pages/session/SessionAdd";
+import SessionList from "./pages/session/SessionList";
+import Semester from "./pages/semester/Semester";
+import SemesterAdd from "./pages/semester/SemesterAdd";
+import SemesterList from "./pages/semester/SemesterList";
+import Section from "./pages/section/Section";
+import SectionAdd from "./pages/section/SectionAdd";
+import SectionList from "./pages/section/SectionList";
+import ClassRoom from "./pages/classRoom/ClassRoom";
+import ClassRoomAdd from "./pages/classRoom/ClassRoomAdd";
+import ClassRoomList from "./pages/classRoom/ClassRoomList";
+import ClassYear from "./pages/classYear/ClassYear";
+import ClassYearAdd from "./pages/classYear/ClassYearAdd";
+import ClassYearList from "./pages/classYear/ClassYearList";
+import Subject from "./pages/subject/Subject";
+import SubjectAdd from "./pages/subject/SubjectAdd";
+import SubjectList from "./pages/subject/SubjectList";
+import Module from "./pages/module/Module";
+import ModuleAdd from "./pages/module/ModuleAdd";
+import ModuleList from "./pages/module/ModuleList";
+import Unit from "./pages/unit/Unit";
+import UnitAdd from "./pages/unit/UnitAdd";
+import UnitList from "./pages/unit/UnitList";
+import Assessment from "./pages/assessment/Assessment";
+import AssessmentAdd from "./pages/assessment/AssessmentAdd";
+import AssessmentList from "./pages/assessment/AssessmentList";
 
 export const MainRouter = () => {
 
@@ -122,6 +149,114 @@ const router = createBrowserRouter([
   {
     path: "/academic/batch-list",
     element: <BatchList />,
+  },
+  {
+    path: "/academic/session",
+    element: <Session />,
+  },
+  {
+    path: "/academic/add-session",
+    element: <SessionAdd />,
+  },
+  {
+    path: "/academic/session-list",
+    element: <SessionList />,
+  },
+  {
+    path: "/academic/semester",
+    element: <Semester />,
+  },
+  {
+    path: "/academic/add-semester",
+    element: <SemesterAdd />,
+  },
+  {
+    path: "/academic/semester-list",
+    element: <SemesterList />,
+  },
+  {
+    path: "/academic/section",
+    element: <Section />,
+  },
+  {
+    path: "/academic/add-section",
+    element: <SectionAdd />,
+  },
+  {
+    path: "/academic/section-list",
+    element: <SectionList />,
+  },
+  {
+    path: "/academic/class-room",
+    element: <ClassRoom />,
+  },
+  {
+    path: "/academic/add-class-room",
+    element: <ClassRoomAdd />,
+  },
+  {
+    path: "/academic/class-room-list",
+    element: <ClassRoomList />,
+  },
+  {
+    path: "/academic/class-year",
+    element: <ClassYear />,
+  },
+  {
+    path: "/academic/add-class-year",
+    element: <ClassYearAdd />,
+  },
+  {
+    path: "/academic/class-year-list",
+    element: <ClassYearList />,
+  },
+  {
+    path: "/academic/subject",
+    element: <Subject />,
+  },
+  {
+    path: "/academic/add-subject",
+    element: <SubjectAdd />,
+  },
+  {
+    path: "/academic/subject-list",
+    element: <SubjectList />,
+  },
+  {
+    path: "/academic/module",
+    element: <Module />,
+  },
+  {
+    path: "/academic/add-module",
+    element: <ModuleAdd />,
+  },
+  {
+    path: "/academic/module-list",
+    element: <ModuleList />,
+  },
+  {
+    path: "/academic/unit",
+    element: <Unit />,
+  },
+  {
+    path: "/academic/add-unit",
+    element: <UnitAdd />,
+  },
+  {
+    path: "/academic/unit-list",
+    element: <UnitList />,
+  },
+  {
+    path: "/academic/assessment",
+    element: <Assessment />,
+  },
+  {
+    path: "/academic/add-assessment",
+    element: <AssessmentAdd />,
+  },
+  {
+    path: "/academic/assessment-list",
+    element: <AssessmentList />,
   },
 ]);
     

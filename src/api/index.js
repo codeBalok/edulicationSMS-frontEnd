@@ -43,6 +43,51 @@ const api = {
     fetchBatchParent : () => http.get('batches/list'),
     createBatch : (data) => http.post('batches', data),
     fetchBatch: () => http.get('batches'),
+
+    // Session APi
+    fetchSessionParent : () => http.get('sessions/list'),
+    createSession : (data) => http.post('sessions', data),
+    fetchSession: () => http.get('sessions'),
+
+    // Semesters APi
+    fetchSemesterParent : () => http.get('semesters/list'),
+    createSemester : (data) => http.post('semesters', data),
+    fetchSemester: () => http.get('semesters'),
+
+    // Section APi
+    fetchSectionParent : () => http.get('sections/list'),
+    createSection : (data) => http.post('sections', data),
+    fetchSection: () => http.get('sections'),
+
+    // ClassRoom APi
+    fetchClassRoomParent : () => http.get('class-rooms/list'),
+    createClassRoom : (data) => http.post('class-rooms', data),
+    fetchClassRoom: () => http.get('class-rooms'),
+
+    // ClassYear APi
+    fetchClassYearParent : () => http.get('class-year/list'),
+    createClassYear : (data) => http.post('class-year', data),
+    fetchClassYear: () => http.get('class-year'),
+
+    // Subject APi
+    fetchSubjectParent : () => http.get('subjects/list'),
+    createSubject : (data) => http.post('subjects', data),
+    fetchSubject: () => http.get('subjects'),
+
+    // Module APi
+    fetchModuleParent : () => http.get('modules/list'),
+    createModule : (data) => http.post('modules', data),
+    fetchModule: () => http.get('modules'),
+
+    // Unit APi
+    fetchUnitParent : () => http.get('units/list'),
+    createUnit : (data) => http.post('units', data),
+    fetchUnit: () => http.get('units'),
+
+    // Assessment APi
+    fetchAssessmentParent : () => http.get('assessment/list'),
+    createAssessment : (data) => http.post('assessment', data),
+    fetchAssessment: () => http.get('assessment'),
     
     // Custom Fieldhttp://127.0.0.1:8000 API
     fetchCustomFields: () => axios.get('http://127.0.0.1:8000/api/custom-fields'),
@@ -66,11 +111,11 @@ const api = {
     // updateCourse: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/courses/${id}`, data),
     // deleteCourse: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/courses/${id}`),
 
-    fetchAssessments: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/assessments`),
-    createAssessment: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/assessments`, data),
-    fetchAssessment: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/assessments/${id}`),
-    updateAssessment: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/assessments/${id}`, data),
-    deleteAssessment: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/assessments/${id}`),
+    // fetchAssessments: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/assessments`),
+    // createAssessment: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/assessments`, data),
+    // fetchAssessment: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/assessments/${id}`),
+    // updateAssessment: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/assessments/${id}`, data),
+    // deleteAssessment: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/assessments/${id}`),
 
     // fetchBatches: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/batches`),
     // createBatch: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/batches`, data),
@@ -78,23 +123,23 @@ const api = {
     // updateBatch: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/batches/${id}`, data),
     // deleteBatch: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/batches/${id}`),
 
-    fetchSemesters: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/semesters`),
-    createSemester: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/semesters`, data),
-    fetchSemester: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/semesters/${id}`),
-    updateSemester: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/semesters/${id}`, data),
-    deleteSemester: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/semesters/${id}`),
+    // fetchSemesters: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/semesters`),
+    // createSemester: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/semesters`, data),
+    // fetchSemester: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/semesters/${id}`),
+    // updateSemester: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/semesters/${id}`, data),
+    // deleteSemester: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/semesters/${id}`),
 
-    fetchUnits: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/units`),
-    createUnit: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/units`, data),
-    fetchUnit: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/units/${id}`),
-    updateUnit: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/units/${id}`, data),
-    deleteUnit: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/units/${id}`),
+    // fetchUnits: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/units`),
+    // createUnit: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/units`, data),
+    // fetchUnit: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/units/${id}`),
+    // updateUnit: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/units/${id}`, data),
+    // deleteUnit: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/units/${id}`),
 
-    fetchModules: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/modules`),
-    createModule: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/modules`, data),
-    fetchModule: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/modules/${id}`),
-    updateModule: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/modules/${id}`, data),
-    deleteModule: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/modules/${id}`),
+    // fetchModules: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/modules`),
+    // createModule: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/modules`, data),
+    // fetchModule: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/modules/${id}`),
+    // updateModule: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/modules/${id}`, data),
+    // deleteModule: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/modules/${id}`),
 
     fetchGradings: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/gradings`),
     createGrading: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/gradings`, data),
@@ -114,35 +159,35 @@ const api = {
     // updateFaculty: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/faculties/${id}`, data),
     // deleteFaculty: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/faculties/${id}`),
 
-    fetchSessions: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/sessions`),
-    createSession: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/sessions`, data),
-    fetchSession: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/sessions/${id}`),
-    updateSession: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/sessions/${id}`, data),
-    deleteSession: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/sessions/${id}`),
+    // fetchSessions: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/sessions`),
+    // createSession: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/sessions`, data),
+    // fetchSession: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/sessions/${id}`),
+    // updateSession: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/sessions/${id}`, data),
+    // deleteSession: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/sessions/${id}`),
 
-    fetchSections: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/sections`),
-    createSection: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/sections`, data),
-    fetchSection: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/sections/${id}`),
-    updateSection: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/sections/${id}`, data),
-    deleteSection: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/sections/${id}`),
+    // fetchSections: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/sections`),
+    // createSection: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/sections`, data),
+    // fetchSection: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/sections/${id}`),
+    // updateSection: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/sections/${id}`, data),
+    // deleteSection: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/sections/${id}`),
 
-    fetchClassYears: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/class-years`),
-    createClassYear: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/class-years`, data),
-    fetchClassYear: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/class-years/${id}`),
-    updateClassYear: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/class-years/${id}`, data),
-    deleteClassYear: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/class-years/${id}`),
+    // fetchClassYears: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/class-years`),
+    // createClassYear: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/class-years`, data),
+    // fetchClassYear: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/class-years/${id}`),
+    // updateClassYear: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/class-years/${id}`, data),
+    // deleteClassYear: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/class-years/${id}`),
 
-    fetchClassrooms: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/classrooms`),
-    createClassroom: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/classrooms`, data),
-    fetchClassroom: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/classrooms/${id}`),
-    updateClassroom: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/classrooms/${id}`, data),
-    deleteClassroom: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/classrooms/${id}`),
+    // fetchClassrooms: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/classrooms`),
+    // createClassroom: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/classrooms`, data),
+    // fetchClassroom: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/classrooms/${id}`),
+    // updateClassroom: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/classrooms/${id}`, data),
+    // deleteClassroom: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/classrooms/${id}`),
 
-    fetchSubjects: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/subjects`),
-    createSubject: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/subjects`, data),
-    fetchSubject: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/subjects/${id}`),
-    updateSubject: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/subjects/${id}`, data),
-    deleteSubject: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/subjects/${id}`),
+    // fetchSubjects: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/subjects`),
+    // createSubject: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/subjects`, data),
+    // fetchSubject: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/subjects/${id}`),
+    // updateSubject: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/subjects/${id}`, data),
+    // deleteSubject: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/subjects/${id}`),
 
     fetchCurriculums: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/curriculums`),
     createCurriculum: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/curriculums`, data),

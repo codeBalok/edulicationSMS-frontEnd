@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
+import { toKebabCase } from '../utils/stringUtils';
 
 const Sidebar = ({ selectedItems }) => {
 
@@ -29,7 +30,7 @@ const Sidebar = ({ selectedItems }) => {
                                                 key={item}
                                                 className="mb-2 cursor-pointer hover:text-blue-500"
                                             >
-                                                <Link to = {`/academic/${item.toLowerCase()}`}>
+                                                <Link to = {`/academic/${toKebabCase(item)}`}>
                                                    {item}
                                                 </Link>
                                             </li>

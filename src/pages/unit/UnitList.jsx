@@ -6,21 +6,21 @@ import { Link } from 'react-router-dom'
 import { parentExtractor } from '../../utils/stringUtils'
 import Nav from './Nav'
 
-const BatchList = () => {
+const UnitList = () => {
 
     const { state, dispatch } = useContext(HierarchyContext)
 
     const [program, setProgram] = useState();
     const [parent, setParent] = useState();
 
-    const getProgram = async () => {
-        const data = await api.fetchBatch();
+    const getClassRoom = async () => {
+        const data = await api.fetchUnit();
         const model = parentExtractor(data.data[0]?.parent_type)
         setProgram(data.data)
         setParent(model)
     }
     useEffect(() => {
-        getProgram()
+        getClassRoom()
     
     }, [])
 
@@ -35,12 +35,15 @@ const BatchList = () => {
                 <Nav />
                 
                 <div className="overflow-x-auto mt-32 bg-white shadow px-4">
-            <table className="min-w-full divide-y divide-gray-200">
+                      <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-blue-500">
                     <tr>
                         <th className="px-4 py-2 text-left text-sm font-medium text-white">#</th>
-                        <th className="px-4 py-2 text-left text-sm font-medium text-white">Batch</th>
-                        <th className="px-4 py-2 text-left text-sm font-medium text-white">Start Date</th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-white">Unit</th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-white">Learning Hours</th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-white">Content</th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-white">Resources</th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-white">Assessments</th>
                         <th className="px-4 py-2 text-left text-sm font-medium text-white">{ parent }</th>
                         <th className="px-4 py-2 text-left text-sm font-medium text-white">Status</th>
                         <th className="px-4 py-2 text-left text-sm font-medium text-white">Actions</th>
@@ -52,7 +55,10 @@ const BatchList = () => {
                         <tr key={data.id}>
                             <td className="px-4 py-2 text-sm text-gray-700">{index + 1}</td>
                             <td className="px-4 py-2 text-sm text-gray-700">{data?.title}</td>
-                            <td className="px-4 py-2 text-sm text-gray-700">{data?.start_date}</td>
+                            <td className="px-4 py-2 text-sm text-gray-700">{data?.learning_hours}</td>
+                            <td className="px-4 py-2 text-sm text-gray-700">{data?.content}</td>
+                            <td className="px-4 py-2 text-sm text-gray-700">{data?.resources}</td>
+                            <td className="px-4 py-2 text-sm text-gray-700">{data?.assessments}</td>
                             <td className="px-4 py-2 text-sm text-gray-700">{data?.parent?.title}</td>
                             <td className="px-4 py-2 text-sm">
                                 <span
@@ -83,6 +89,7 @@ const BatchList = () => {
                     ))}
                 </tbody>
             </table>
+                    
             <div className="flex items-center justify-between p-4 bg-gray-100">
                 <span className="text-sm text-gray-700">Showing 1 to 6 of 6 entries</span>
                 <div className="flex space-x-2">
@@ -101,5 +108,5 @@ const BatchList = () => {
   )
 }
 
-export default BatchList
+export default UnitList
 
