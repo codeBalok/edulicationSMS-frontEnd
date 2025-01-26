@@ -5,35 +5,43 @@ import api from '../../api'
 import { Link } from 'react-router-dom'
 import Nav from './Nav'
 
-const GradingAdd = () => {
+const EventAdd = () => {
 
   const { state, dispatch } = useContext(HierarchyContext)
   const [parent, setParent] = useState(null);
   const [parentId, setParentId] = useState("");
     
   const [title, setTitle] = useState("");
-  const [gradePoints, setGradePoints] = useState();
-  const [minMarks, setMinMarks] = useState();
-  const [maxMarks, setMaxMarks] = useState();
-  const [gradeLetter, setGradeLetter] = useState("");
-  const [gradeDescription, setGradeDescription] = useState("");
-  const [gradeValue, setGradeValue] = useState();
-  const [gradeRange, setGradeRange] = useState("");
+  const [courseType, setCourseType] = useState("Online Training");
+const [reportingState, setReportingState] = useState("Active");
+const [courseName, setCourseName] = useState("Advanced PHP");
+const [group, setGroup] = useState("Developers");
+const [trainers, setTrainers] = useState("John Doe, Jane Doe");
+const [assessors, setAssessors] = useState("John Smith");
+const [month, setMonth] = useState("January");
+const [year, setYear] = useState("2025");
+const [courseQuota, setCourseQuota] = useState("50");
+const [courseCost, setCourseCost] = useState("500 USD");
+const [city, setCity] = useState("Addis Ababa");
+const [location, setLocation] = useState("Main Office");
+const [resources, setResources] = useState("Laptop, Projector");
+const [selectUnits, setSelectUnits] = useState("Unit A, Unit B");
+const [deliveryMode, setDeliveryMode] = useState("Online");
+const [predominantDeliveryMode, setPredominantDeliveryMode] = useState("Self-paced");
+const [archive, setArchive] = useState("Archived");
+
+
   const [description, setDescription] = useState("");
 
-
-  useEffect(() => {
-console.log("grading ::", parent)
-  },[parent])
   
     const getParent = async () => {
-        const response = await api.fetchGradingParent();
+        const response = await api.fetchEventParent();
         setParent(response?.data.data)
         console.log("data from sem:",response)
     }
 
-    const sentGrading = async (data) => {
-        const response = await api.createGrading(data);
+    const sendEvent = async (data) => {
+        const response = await api.createEvent(data);
         if (response.status !== 201) {
             alert("failed to add program")
         }
@@ -47,18 +55,26 @@ console.log("grading ::", parent)
         e.preventDefault();
       
       const formData = {
-        title,
-       grade_points: gradePoints,
-      min_marks: minMarks,
-      max_marks: maxMarks,
-      grade_letter: gradeLetter,
-      grade_value: gradeValue,
-      grade_range: gradeRange,
-        grade_description: description,
+      course_type: courseType,
+      reporting_state: reportingState,
+      course_name: courseName,
+      group,
+      trainers,
+      assessors,
+      month,
+      year,
+      course_quota: courseQuota,
+      course_cost: courseCost,
+      city,
+      location,
+      resources,
+      selects_units: selectUnits,
+      delivery_mode: deliveryMode,
+      predominant_delivery_mode: predominantDeliveryMode,
         ...(parentId && parent && { parent_id: parentId }),
       }
-      console.log("Grading::", formData)
-      sentGrading(formData)
+      console.log("EVT::", formData)
+      sendEvent(formData)
 
     };
 
@@ -110,84 +126,61 @@ console.log("grading ::", parent)
     />
   </div>
 
-     {/* Grade Points */}
+    {/* Course Type */}
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">
-          Grade Points <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="number"
-          className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          value={gradePoints}
-          onChange={(e) => setGradePoints(Number(e.target.value))}
-        />
-      </div>
-
-      {/* Min Marks */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">
-          Minimum Marks <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="number"
-          className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          value={minMarks}
-          onChange={(e) => setMinMarks(Number(e.target.value))}
-        />
-      </div>
-
-      {/* Max Marks */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">
-          Maximum Marks <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="number"
-          className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          value={maxMarks}
-          onChange={(e) => setMaxMarks(Number(e.target.value))}
-        />
-      </div>
-
-      {/* Grade Letter */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">
-          Grade Letter <span className="text-red-500">*</span>
-        </label>
+        <label className="block text-sm font-medium text-gray-700">Course Type</label>
         <input
           type="text"
           className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          value={gradeLetter}
-          onChange={(e) => setGradeLetter(e.target.value)}
+          value={courseType}
+          onChange={(e) => setCourseType(e.target.value)}
         />
       </div>
 
-      {/* Grade Value */}
+      {/* Reporting State */}
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">
-          Grade Value <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="number"
-          className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          value={gradeValue}
-          onChange={(e) => setGradeValue(Number(e.target.value))}
-        />
-      </div>
-
-      {/* Grade Range */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">
-          Grade Range <span className="text-red-500">*</span>
-        </label>
+        <label className="block text-sm font-medium text-gray-700">Reporting State</label>
         <input
           type="text"
           className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          value={gradeRange}
-          onChange={(e) => setGradeRange(e.target.value)}
+          value={reportingState}
+          onChange={(e) => setReportingState(e.target.value)}
         />
       </div>
 
+      {/* Course Name */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700">Course Name</label>
+        <input
+          type="text"
+          className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          value={courseName}
+          onChange={(e) => setCourseName(e.target.value)}
+        />
+      </div>
+
+      {/* Group */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700">Group</label>
+        <input
+          type="text"
+          className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          value={group}
+          onChange={(e) => setGroup(e.target.value)}
+        />
+      </div>
+
+      {/* Trainers */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700">Trainers</label>
+        <input
+          type="text"
+          className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          value={trainers}
+          onChange={(e) => setTrainers(e.target.value)}
+        />
+      </div>
+            
   {/* Description Input */}
   <div className="mb-4">
     <label className="block text-sm font-medium text-gray-700">
@@ -217,5 +210,5 @@ console.log("grading ::", parent)
   )
 }
 
-export default GradingAdd
+export default EventAdd
 

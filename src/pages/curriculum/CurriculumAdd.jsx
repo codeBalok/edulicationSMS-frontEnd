@@ -5,35 +5,32 @@ import api from '../../api'
 import { Link } from 'react-router-dom'
 import Nav from './Nav'
 
-const GradingAdd = () => {
+const CurriculumAdd = () => {
 
   const { state, dispatch } = useContext(HierarchyContext)
   const [parent, setParent] = useState(null);
   const [parentId, setParentId] = useState("");
     
   const [title, setTitle] = useState("");
-  const [gradePoints, setGradePoints] = useState();
-  const [minMarks, setMinMarks] = useState();
-  const [maxMarks, setMaxMarks] = useState();
-  const [gradeLetter, setGradeLetter] = useState("");
-  const [gradeDescription, setGradeDescription] = useState("");
-  const [gradeValue, setGradeValue] = useState();
-  const [gradeRange, setGradeRange] = useState("");
+
+  const [startDate, setStartDate] = useState("2025-01-01");
+  const [endDate, setEndDate] = useState("2025-12-31");
+  const [version, setVersion] = useState("1.0");
+  const [approvalDate, setApprovalDate] = useState("2025-01-15");
+  const [courses, setCourses] = useState("");
+  const [learningOutcomes, setLearningOutcomes] = useState("");
+
   const [description, setDescription] = useState("");
 
-
-  useEffect(() => {
-console.log("grading ::", parent)
-  },[parent])
   
     const getParent = async () => {
-        const response = await api.fetchGradingParent();
+        const response = await api.fetchCurriculumParent();
         setParent(response?.data.data)
-        console.log("data from sem:",response)
+        console.log("data from currr:",response)
     }
 
-    const sentGrading = async (data) => {
-        const response = await api.createGrading(data);
+    const sendCurriculum = async (data) => {
+        const response = await api.createCurriculum(data);
         if (response.status !== 201) {
             alert("failed to add program")
         }
@@ -48,17 +45,17 @@ console.log("grading ::", parent)
       
       const formData = {
         title,
-       grade_points: gradePoints,
-      min_marks: minMarks,
-      max_marks: maxMarks,
-      grade_letter: gradeLetter,
-      grade_value: gradeValue,
-      grade_range: gradeRange,
-        grade_description: description,
+        start_date: startDate,
+      end_date: endDate,
+      version,
+      approval_date: approvalDate,
+      courses,
+      learning_outcomes: learningOutcomes,
+        description,
         ...(parentId && parent && { parent_id: parentId }),
       }
-      console.log("Grading::", formData)
-      sentGrading(formData)
+      console.log("CUrr::", formData)
+      sendCurriculum(formData)
 
     };
 
@@ -110,82 +107,82 @@ console.log("grading ::", parent)
     />
   </div>
 
-     {/* Grade Points */}
+    {/* Start Date */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
-          Grade Points <span className="text-red-500">*</span>
+          Start Date <span className="text-red-500">*</span>
         </label>
         <input
-          type="number"
+          type="date"
           className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          value={gradePoints}
-          onChange={(e) => setGradePoints(Number(e.target.value))}
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
         />
       </div>
 
-      {/* Min Marks */}
+      {/* End Date */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
-          Minimum Marks <span className="text-red-500">*</span>
+          End Date <span className="text-red-500">*</span>
         </label>
         <input
-          type="number"
+          type="date"
           className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          value={minMarks}
-          onChange={(e) => setMinMarks(Number(e.target.value))}
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
         />
       </div>
 
-      {/* Max Marks */}
+      {/* Version */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
-          Maximum Marks <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="number"
-          className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          value={maxMarks}
-          onChange={(e) => setMaxMarks(Number(e.target.value))}
-        />
-      </div>
-
-      {/* Grade Letter */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">
-          Grade Letter <span className="text-red-500">*</span>
+          Version <span className="text-red-500">*</span>
         </label>
         <input
           type="text"
           className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          value={gradeLetter}
-          onChange={(e) => setGradeLetter(e.target.value)}
+          value={version}
+          onChange={(e) => setVersion(e.target.value)}
         />
       </div>
 
-      {/* Grade Value */}
+      {/* Approval Date */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
-          Grade Value <span className="text-red-500">*</span>
+          Approval Date <span className="text-red-500">*</span>
         </label>
         <input
-          type="number"
+          type="date"
           className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          value={gradeValue}
-          onChange={(e) => setGradeValue(Number(e.target.value))}
+          value={approvalDate}
+          onChange={(e) => setApprovalDate(e.target.value)}
         />
       </div>
 
-      {/* Grade Range */}
+      {/* Courses */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
-          Grade Range <span className="text-red-500">*</span>
+          Courses <span className="text-red-500">*</span>
         </label>
-        <input
-          type="text"
+        <textarea
           className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          value={gradeRange}
-          onChange={(e) => setGradeRange(e.target.value)}
-        />
+          value={courses}
+          onChange={(e) => setCourses(e.target.value)}
+          placeholder="Enter course codes separated by commas, e.g., CS101, CS102, CS103"
+        ></textarea>
+      </div>
+
+      {/* Learning Outcomes */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700">
+          Learning Outcomes <span className="text-red-500">*</span>
+        </label>
+        <textarea
+          className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          value={learningOutcomes}
+          onChange={(e) => setLearningOutcomes(e.target.value)}
+          placeholder="Enter learning outcomes separated by commas, e.g., Critical thinking, Problem-solving"
+        ></textarea>
       </div>
 
   {/* Description Input */}
@@ -217,5 +214,5 @@ console.log("grading ::", parent)
   )
 }
 
-export default GradingAdd
+export default CurriculumAdd
 

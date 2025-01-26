@@ -5,35 +5,31 @@ import api from '../../api'
 import { Link } from 'react-router-dom'
 import Nav from './Nav'
 
-const GradingAdd = () => {
+const AcademicCalendarAdd = () => {
 
   const { state, dispatch } = useContext(HierarchyContext)
   const [parent, setParent] = useState(null);
   const [parentId, setParentId] = useState("");
     
   const [title, setTitle] = useState("");
-  const [gradePoints, setGradePoints] = useState();
-  const [minMarks, setMinMarks] = useState();
-  const [maxMarks, setMaxMarks] = useState();
-  const [gradeLetter, setGradeLetter] = useState("");
-  const [gradeDescription, setGradeDescription] = useState("");
-  const [gradeValue, setGradeValue] = useState();
-  const [gradeRange, setGradeRange] = useState("");
+  const [startDate, setStartDate] = useState("2025-01-01");
+  const [endDate, setEndDate] = useState("2025-12-31");
+  const [academicYear, setAcademicYear] = useState("2025-2026");
+  const [holidays, setHolidays] = useState("Easter on 2025-04-14");
+  const [events, setEvents] = useState("Sports Day on 2025-06-01");
+  const [terms, setTerms] = useState("Spring term from 2025-01-01 to 2025-05-31");
+
   const [description, setDescription] = useState("");
 
-
-  useEffect(() => {
-console.log("grading ::", parent)
-  },[parent])
   
     const getParent = async () => {
-        const response = await api.fetchGradingParent();
+        const response = await api.fetchAcademicCalendarParent();
         setParent(response?.data.data)
         console.log("data from sem:",response)
     }
 
-    const sentGrading = async (data) => {
-        const response = await api.createGrading(data);
+    const sendAcademicCalendar = async (data) => {
+        const response = await api.createAcademicCalendar(data);
         if (response.status !== 201) {
             alert("failed to add program")
         }
@@ -48,17 +44,17 @@ console.log("grading ::", parent)
       
       const formData = {
         title,
-       grade_points: gradePoints,
-      min_marks: minMarks,
-      max_marks: maxMarks,
-      grade_letter: gradeLetter,
-      grade_value: gradeValue,
-      grade_range: gradeRange,
-        grade_description: description,
+       start_date: startDate,
+      end_date: endDate,
+      academic_year: academicYear,
+      holidays,
+      events,
+      terms,
+        description,
         ...(parentId && parent && { parent_id: parentId }),
       }
-      console.log("Grading::", formData)
-      sentGrading(formData)
+      console.log("AC::", formData)
+      sendAcademicCalendar(formData)
 
     };
 
@@ -110,84 +106,85 @@ console.log("grading ::", parent)
     />
   </div>
 
-     {/* Grade Points */}
+   {/* Start Date */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
-          Grade Points <span className="text-red-500">*</span>
+          Start Date <span className="text-red-500">*</span>
         </label>
         <input
-          type="number"
+          type="date"
           className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          value={gradePoints}
-          onChange={(e) => setGradePoints(Number(e.target.value))}
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
         />
       </div>
 
-      {/* Min Marks */}
+      {/* End Date */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
-          Minimum Marks <span className="text-red-500">*</span>
+          End Date <span className="text-red-500">*</span>
         </label>
         <input
-          type="number"
+          type="date"
           className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          value={minMarks}
-          onChange={(e) => setMinMarks(Number(e.target.value))}
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
         />
       </div>
 
-      {/* Max Marks */}
+      {/* Academic Year */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
-          Maximum Marks <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="number"
-          className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          value={maxMarks}
-          onChange={(e) => setMaxMarks(Number(e.target.value))}
-        />
-      </div>
-
-      {/* Grade Letter */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">
-          Grade Letter <span className="text-red-500">*</span>
+          Academic Year <span className="text-red-500">*</span>
         </label>
         <input
           type="text"
           className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          value={gradeLetter}
-          onChange={(e) => setGradeLetter(e.target.value)}
+          value={academicYear}
+          onChange={(e) => setAcademicYear(e.target.value)}
+          placeholder="Enter academic year, e.g., 2025-2026"
         />
       </div>
 
-      {/* Grade Value */}
+      {/* Holidays */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
-          Grade Value <span className="text-red-500">*</span>
+          Holidays <span className="text-red-500">*</span>
         </label>
-        <input
-          type="number"
+        <textarea
           className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          value={gradeValue}
-          onChange={(e) => setGradeValue(Number(e.target.value))}
-        />
+          value={holidays}
+          onChange={(e) => setHolidays(e.target.value)}
+          placeholder="Enter holiday details, e.g., Easter on 2025-04-14"
+        ></textarea>
       </div>
 
-      {/* Grade Range */}
+      {/* Events */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
-          Grade Range <span className="text-red-500">*</span>
+          Events <span className="text-red-500">*</span>
         </label>
-        <input
-          type="text"
+        <textarea
           className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          value={gradeRange}
-          onChange={(e) => setGradeRange(e.target.value)}
-        />
+          value={events}
+          onChange={(e) => setEvents(e.target.value)}
+          placeholder="Enter event details, e.g., Sports Day on 2025-06-01"
+        ></textarea>
       </div>
 
+      {/* Terms */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700">
+          Terms <span className="text-red-500">*</span>
+        </label>
+        <textarea
+          className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          value={terms}
+          onChange={(e) => setTerms(e.target.value)}
+          placeholder="Enter term details, e.g., Spring term from 2025-01-01 to 2025-05-31"
+        ></textarea>
+      </div>
+            
   {/* Description Input */}
   <div className="mb-4">
     <label className="block text-sm font-medium text-gray-700">
@@ -217,5 +214,5 @@ console.log("grading ::", parent)
   )
 }
 
-export default GradingAdd
+export default AcademicCalendarAdd
 

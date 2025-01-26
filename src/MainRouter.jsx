@@ -59,6 +59,19 @@ import AssessmentAdd from "./pages/assessment/AssessmentAdd";
 import AssessmentList from "./pages/assessment/AssessmentList";
 import GradingAdd from "./pages/grading/GradingAdd";
 import Grading from "./pages/grading/Grading";
+import GradingList from "./pages/grading/GradingList";
+import Curriculum from "./pages/curriculum/Curriculum";
+import CurriculumAdd from "./pages/curriculum/CurriculumAdd";
+import CurriculumList from "./pages/curriculum/CurriculumList";
+import LearningOutcome from "./pages/learningOutcome/LearningOutcome";
+import LearningOutcomeAdd from "./pages/learningOutcome/LearningOutcomeAdd";
+import LearningOutcomeList from "./pages/learningOutcome/LearningOutcomeList";
+import AcademicCalendar from "./pages/academicCalendar/LearningOutcome";
+import AcademicCalendarAdd from "./pages/academicCalendar/AcademicCalendarAdd";
+import AcademicCalendarAddList from "./pages/academicCalendar/AcademicCalendarList";
+import Event from "./pages/event/Event";
+import EventAdd from "./pages/event/EventAdd";
+import EventList from "./pages/event/EventList";
 
 export const MainRouter = () => {
 
@@ -249,18 +262,6 @@ const router = createBrowserRouter([
     element: <UnitList />,
   },
   {
-    path: "/academic/grading",
-    element: <Grading />,
-  },
-  {
-    path: "/academic/add-grading",
-    element: <GradingAdd />,
-  },
-  {
-    path: "/academic/assessment-list",
-    element: <AssessmentList />,
-  },
-  {
     path: "/academic/assessment",
     element: <Assessment />,
   },
@@ -271,6 +272,66 @@ const router = createBrowserRouter([
   {
     path: "/academic/assessment-list",
     element: <AssessmentList />,
+  },
+   {
+    path: "/academic/grading",
+    element: <Grading />,
+  },
+  {
+    path: "/academic/add-grading",
+    element: <GradingAdd />,
+  },
+  {
+    path: "/academic/grading-list",
+    element: <GradingList />,
+  },
+   {
+    path: "/academic/curriculum",
+    element: <Curriculum />,
+  },
+  {
+    path: "/academic/add-curriculum",
+    element: <CurriculumAdd />,
+  },
+  {
+    path: "/academic/curriculum-list",
+    element: <CurriculumList />,
+  },
+   {
+    path: "/academic/learning-outcome",
+    element: <LearningOutcome />,
+  },
+  {
+    path: "/academic/add-learning-outcome",
+    element: <LearningOutcomeAdd />,
+  },
+  {
+    path: "/academic/learning-outcome-list",
+    element: <LearningOutcomeList />,
+  },
+   {
+    path: "/academic/academic-calendar",
+    element: <AcademicCalendar />,
+  },
+  {
+    path: "/academic/add-academic-calendar",
+    element: <AcademicCalendarAdd />,
+  },
+  {
+    path: "/academic/academic-calendar-list",
+    element: <AcademicCalendarAddList />,
+  },
+   {
+    path: "/academic/event",
+    element: <Event />,
+  },
+  {
+    path: "/academic/add-event",
+    element: <EventAdd />,
+  },
+  {
+    path: "/academic/event-list",
+    element: <EventList />,
   },
 ]);
     

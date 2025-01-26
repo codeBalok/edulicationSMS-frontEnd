@@ -5,35 +5,28 @@ import api from '../../api'
 import { Link } from 'react-router-dom'
 import Nav from './Nav'
 
-const GradingAdd = () => {
+const LearningOutcomeAdd = () => {
 
   const { state, dispatch } = useContext(HierarchyContext)
   const [parent, setParent] = useState(null);
   const [parentId, setParentId] = useState("");
     
   const [title, setTitle] = useState("");
-  const [gradePoints, setGradePoints] = useState();
-  const [minMarks, setMinMarks] = useState();
-  const [maxMarks, setMaxMarks] = useState();
-  const [gradeLetter, setGradeLetter] = useState("");
-  const [gradeDescription, setGradeDescription] = useState("");
-  const [gradeValue, setGradeValue] = useState();
-  const [gradeRange, setGradeRange] = useState("");
+  const [level, setLevel] = useState("");
+  const [assessmentMethods, setAssessmentMethods] = useState("");
+  const [performanceCriteria, setPerformanceCriteria] = useState("");
+  const [mapping, setMapping] = useState("");
   const [description, setDescription] = useState("");
 
-
-  useEffect(() => {
-console.log("grading ::", parent)
-  },[parent])
   
     const getParent = async () => {
-        const response = await api.fetchGradingParent();
+        const response = await api.fetchLearningOutcomeParent();
         setParent(response?.data.data)
         console.log("data from sem:",response)
     }
 
-    const sentGrading = async (data) => {
-        const response = await api.createGrading(data);
+    const sendLearningOutcomes = async (data) => {
+        const response = await api.createLearningOutcome(data);
         if (response.status !== 201) {
             alert("failed to add program")
         }
@@ -48,17 +41,15 @@ console.log("grading ::", parent)
       
       const formData = {
         title,
-       grade_points: gradePoints,
-      min_marks: minMarks,
-      max_marks: maxMarks,
-      grade_letter: gradeLetter,
-      grade_value: gradeValue,
-      grade_range: gradeRange,
-        grade_description: description,
+       level,
+      assessment_methods: assessmentMethods,
+      performance_criteria: performanceCriteria,
+      mapping,
+        description,
         ...(parentId && parent && { parent_id: parentId }),
       }
-      console.log("Grading::", formData)
-      sentGrading(formData)
+      console.log("Outcomesss::", formData)
+      sendLearningOutcomes(formData)
 
     };
 
@@ -110,82 +101,74 @@ console.log("grading ::", parent)
     />
   </div>
 
-     {/* Grade Points */}
+    {/* Level Selection */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
-          Grade Points <span className="text-red-500">*</span>
+          Level <span className="text-red-500">*</span>
         </label>
-        <input
-          type="number"
+        <select
           className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          value={gradePoints}
-          onChange={(e) => setGradePoints(Number(e.target.value))}
-        />
+          value={level}
+          onChange={(e) => setLevel(e.target.value)}
+        >
+          <option value="basic">Basic</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="advanced">Advanced</option>
+        </select>
       </div>
 
-      {/* Min Marks */}
+      {/* Status Selection */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
-          Minimum Marks <span className="text-red-500">*</span>
+          Status <span className="text-red-500">*</span>
         </label>
-        <input
-          type="number"
+        <select
           className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          value={minMarks}
-          onChange={(e) => setMinMarks(Number(e.target.value))}
-        />
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+        >
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
       </div>
 
-      {/* Max Marks */}
+      {/* Assessment Methods */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
-          Maximum Marks <span className="text-red-500">*</span>
+          Assessment Methods <span className="text-red-500">*</span>
         </label>
-        <input
-          type="number"
+        <textarea
           className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          value={maxMarks}
-          onChange={(e) => setMaxMarks(Number(e.target.value))}
-        />
+          value={assessmentMethods}
+          onChange={(e) => setAssessmentMethods(e.target.value)}
+          placeholder="Enter assessment methods, e.g., Tests, Assignments"
+        ></textarea>
       </div>
 
-      {/* Grade Letter */}
+      {/* Performance Criteria */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
-          Grade Letter <span className="text-red-500">*</span>
+          Performance Criteria <span className="text-red-500">*</span>
         </label>
-        <input
-          type="text"
+        <textarea
           className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          value={gradeLetter}
-          onChange={(e) => setGradeLetter(e.target.value)}
-        />
+          value={performanceCriteria}
+          onChange={(e) => setPerformanceCriteria(e.target.value)}
+          placeholder="Enter performance criteria, e.g., Meet 75% of learning outcomes"
+        ></textarea>
       </div>
 
-      {/* Grade Value */}
+      {/* Mapping */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
-          Grade Value <span className="text-red-500">*</span>
+          Mapping <span className="text-red-500">*</span>
         </label>
-        <input
-          type="number"
+        <textarea
           className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          value={gradeValue}
-          onChange={(e) => setGradeValue(Number(e.target.value))}
-        />
-      </div>
-
-      {/* Grade Range */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">
-          Grade Range <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="text"
-          className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          value={gradeRange}
-          onChange={(e) => setGradeRange(e.target.value)}
-        />
+          value={mapping}
+          onChange={(e) => setMapping(e.target.value)}
+          placeholder="Enter mapping, e.g., Mapped to programming fundamentals"
+        ></textarea>
       </div>
 
   {/* Description Input */}
@@ -217,5 +200,5 @@ console.log("grading ::", parent)
   )
 }
 
-export default GradingAdd
+export default LearningOutcomeAdd
 

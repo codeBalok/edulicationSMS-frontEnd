@@ -82,12 +82,11 @@ const CourseAdd = () => {
                 <Nav />
                  <form className="bg-white mt-16 p-6 w-[60%]" onSubmit={handleSubmit}>
       {/* Parent Dropdown */}
-      {parent !== null && (
+       {parent !== null && (
         <div className="mb-4">
           <label
             htmlFor="parent"
-            className="block text-sm font-medium text-gray-700"
-                            >{ parent[0]?.model}<span className="text-red-500">*</span>
+            className="block text-sm font-medium text-gray-700">{ parent[0]?.model}<span className="text-red-500">*</span>
           </label>
           <select
             id="parent"

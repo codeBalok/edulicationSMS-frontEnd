@@ -3,8 +3,13 @@ export const parentExtractor = (model) => {
 };
 
 export const toKebabCase = (str) => {
-  return str ? str
-    .replace(/\s+/g, '-')
-    .replace(/[A-Z]/g, (match) => '-' + match.toLowerCase())
-    .replace(/^-/, '') : null;
+   return str
+    ? str
+        .trim() 
+        .replace(/([a-z])([A-Z])/g, '$1-$2')
+        .replace(/\s+/g, '-') 
+        .toLowerCase() 
+    : null;
 }
+
+

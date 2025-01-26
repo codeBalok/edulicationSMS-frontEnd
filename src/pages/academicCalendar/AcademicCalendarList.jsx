@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { parentExtractor } from '../../utils/stringUtils'
 import Nav from './Nav'
 
-const AssessmentList = () => {
+const AcademicCalendarAddList = () => {
 
     const { state, dispatch } = useContext(HierarchyContext)
 
@@ -14,7 +14,7 @@ const AssessmentList = () => {
     const [parent, setParent] = useState();
 
     const getClassRoom = async () => {
-        const data = await api.fetchAssessment();
+        const data = await api.fetchAcademicCalendar();
         const model = parentExtractor(data.data[0]?.parent_type)
         setProgram(data.data)
         setParent(model)
@@ -39,11 +39,12 @@ const AssessmentList = () => {
                 <thead className="bg-blue-500">
                     <tr>
                         <th className="px-4 py-2 text-left text-sm font-medium text-white">#</th>
-                        <th className="px-4 py-2 text-left text-sm font-medium text-white">Assessment</th>
-                        <th className="px-4 py-2 text-left text-sm font-medium text-white">Type</th>
-                        <th className="px-4 py-2 text-left text-sm font-medium text-white">Weightage</th>
-                        <th className="px-4 py-2 text-left text-sm font-medium text-white">Total Marks</th>
-                        <th className="px-4 py-2 text-left text-sm font-medium text-white">Passing Marks</th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-white">Academic Calendar</th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-white">Start Date</th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-white">End Date</th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-white">Academic Year</th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-white">Holidays</th>
+                        <th className="px-4 py-2 text-left text-sm font-medium text-white">Events</th>
                         <th className="px-4 py-2 text-left text-sm font-medium text-white">{ parent }</th>
                         <th className="px-4 py-2 text-left text-sm font-medium text-white">Status</th>
                         <th className="px-4 py-2 text-left text-sm font-medium text-white">Actions</th>
@@ -55,10 +56,11 @@ const AssessmentList = () => {
                         <tr key={data.id}>
                             <td className="px-4 py-2 text-sm text-gray-700">{index + 1}</td>
                             <td className="px-4 py-2 text-sm text-gray-700">{data?.title}</td>
-                            <td className="px-4 py-2 text-sm text-gray-700">{data?.type}</td>
-                            <td className="px-4 py-2 text-sm text-gray-700">{data?.weightage}</td>
-                            <td className="px-4 py-2 text-sm text-gray-700">{data?.total_marks}</td>
-                            <td className="px-4 py-2 text-sm text-gray-700">{data?.passing_marks}</td>
+                            <td className="px-4 py-2 text-sm text-gray-700">{data?.start_date}</td>
+                            <td className="px-4 py-2 text-sm text-gray-700">{data?.end_date}</td>
+                            <td className="px-4 py-2 text-sm text-gray-700">{data?.academic_year}</td>
+                            <td className="px-4 py-2 text-sm text-gray-700">{data?.holidays}</td>
+                            <td className="px-4 py-2 text-sm text-gray-700">{data?.events}</td>
                             <td className="px-4 py-2 text-sm text-gray-700">{data?.parent?.title}</td>
                             <td className="px-4 py-2 text-sm">
                                 <span
@@ -107,5 +109,5 @@ const AssessmentList = () => {
   )
 }
 
-export default AssessmentList
+export default AcademicCalendarAddList
 

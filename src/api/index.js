@@ -93,15 +93,35 @@ const api = {
     fetchGradingParent : () => http.get('gradings/list'),
     createGrading : (data) => http.post('gradings', data),
     fetchGrading: () => http.get('gradings'),
+
+    // Curriculum APi
+    fetchCurriculumParent : () => http.get('curriculums/list'),
+    createCurriculum : (data) => http.post('curriculums', data),
+    fetchCurriculum: () => http.get('curriculums'),
+
+    // LearningOutcome APi
+    fetchLearningOutcomeParent : () => http.get('learning-outcomes/list'),
+    createLearningOutcome : (data) => http.post('learning-outcomes', data),
+    fetchLearningOutcome: () => http.get('learning-outcomes'),
+
+    // AcademicCalendar APi
+    fetchAcademicCalendarParent : () => http.get('academic-calendars/list'),
+    createAcademicCalendar : (data) => http.post('academic-calendars', data),
+    fetchAcademicCalendar: () => http.get('academic-calendars'),
+
+    // Event APi
+    fetchEventParent : () => http.get('events/list'),
+    createEvent : (data) => http.post('events', data),
+    fetchEvent: () => http.get('events'),
     
     // Custom Fieldhttp://127.0.0.1:8000 API
-    fetchCustomFields: () => axios.get('http://127.0.0.1:8000/api/custom-fields'),
-    createCustomField: (id, data) => axios.post(`http://127.0.0.1:8000/api/create-custom-fields/${id}`, data),
-    fetchCustomField: (id) => axios.get(`http://127.0.0.1:8000/api/custom-fields/${id}`),
-    updateCustomField: (id, data) => axios.put(`http://127.0.0.1:8000/api/custom-fields/${id}`, data),
-    deleteCustomField: (id) => axios.delete(`http://127.0.0.1:8000/api/custom-fields/${id}`),
-    fetchCustomFieldValues: (academicItem) => axios.get(`http://127.0.0.1:8000/api/custom-fields/${academicItem}/values`),
-    saveCustomFieldValues: (academicItem, data) => axios.post(`http://127.0.0.1:8000/api/custom-fields/${academicItem}/values`, data),
+    // fetchCustomFields: () => axios.get('http://127.0.0.1:8000/api/custom-fields'),
+    // createCustomField: (id, data) => axios.post(`http://127.0.0.1:8000/api/create-custom-fields/${id}`, data),
+    // fetchCustomField: (id) => axios.get(`http://127.0.0.1:8000/api/custom-fields/${id}`),
+    // updateCustomField: (id, data) => axios.put(`http://127.0.0.1:8000/api/custom-fields/${id}`, data),
+    // deleteCustomField: (id) => axios.delete(`http://127.0.0.1:8000/api/custom-fields/${id}`),
+    // fetchCustomFieldValues: (academicItem) => axios.get(`http://127.0.0.1:8000/api/custom-fields/${academicItem}/values`),
+    // saveCustomFieldValues: (academicItem, data) => axios.post(`http://127.0.0.1:8000/api/custom-fields/${academicItem}/values`, data),
 
     // Default Fieldhttp://127.0.0.1:8000 API (New)
     // fetchPrograms: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/programs`),
@@ -194,29 +214,29 @@ const api = {
     // updateSubject: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/subjects/${id}`, data),
     // deleteSubject: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/subjects/${id}`),
 
-    fetchCurriculums: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/curriculums`),
-    createCurriculum: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/curriculums`, data),
-    fetchCurriculum: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/curriculums/${id}`),
-    updateCurriculum: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/curriculums/${id}`, data),
-    deleteCurriculum: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/curriculums/${id}`),
+    // fetchCurriculums: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/curriculums`),
+    // createCurriculum: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/curriculums`, data),
+    // fetchCurriculum: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/curriculums/${id}`),
+    // updateCurriculum: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/curriculums/${id}`, data),
+    // deleteCurriculum: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/curriculums/${id}`),
 
-    fetchLearningOutcomes: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/learning-outcomes`),
-    createLearningOutcome: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/learning-outcomes`, data),
-    fetchLearningOutcome: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/learning-outcomes/${id}`),
-    updateLearningOutcome: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/learning-outcomes/${id}`, data),
-    deleteLearningOutcome: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/learning-outcomes/${id}`),
+    // fetchLearningOutcomes: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/learning-outcomes`),
+    // createLearningOutcome: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/learning-outcomes`, data),
+    // fetchLearningOutcome: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/learning-outcomes/${id}`),
+    // updateLearningOutcome: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/learning-outcomes/${id}`, data),
+    // deleteLearningOutcome: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/learning-outcomes/${id}`),
 
-    fetchAcademicCalendars: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/academic-calendars`),
-    createAcademicCalendar: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/academic-calendars`, data),
-    fetchAcademicCalendar: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/academic-calendars/${id}`),
-    updateAcademicCalendar: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/academic-calendars/${id}`, data),
-    deleteAcademicCalendar: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/academic-calendars/${id}`),
+    // fetchAcademicCalendars: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/academic-calendars`),
+    // createAcademicCalendar: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/academic-calendars`, data),
+    // fetchAcademicCalendar: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/academic-calendars/${id}`),
+    // updateAcademicCalendar: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/academic-calendars/${id}`, data),
+    // deleteAcademicCalendar: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/academic-calendars/${id}`),
 
-    fetchEvents: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/events`),
-    createEvent: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/events`, data),
-    fetchEvent: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/events/${id}`),
-    updateEvent: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/events/${id}`, data),
-    deleteEvent: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/events/${id}`),
+    // fetchEvents: (instituteId) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/events`),
+    // createEvent: (instituteId, data) => axios.post(`http://127.0.0.1:8000/api/institutes/${instituteId}/events`, data),
+    // fetchEvent: (instituteId, id) => axios.get(`http://127.0.0.1:8000/api/institutes/${instituteId}/events/${id}`),
+    // updateEvent: (instituteId, id, data) => axios.put(`http://127.0.0.1:8000/api/institutes/${instituteId}/events/${id}`, data),
+    // deleteEvent: (instituteId, id) => axios.delete(`http://127.0.0.1:8000/api/institutes/${instituteId}/events/${id}`),
 };
 
 export default api;

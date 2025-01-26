@@ -28,8 +28,8 @@ const AcademicSetting = () => {
         { id: 'assessment', name: 'Assessment', order: 14, isSelected: false },
         { id: 'grading', name: 'Grading', order: 15, isSelected: false },
         { id: 'curriculum', name: 'Curriculum', order: 16, isSelected: false },
-        { id: 'learning_outcome', name: 'Learning Outcome', order: 17, isSelected: false },
-        { id: 'academic_calendar', name: 'Academic Calendar', order: 18, isSelected: false },
+        { id: 'learning_outcome', name: 'LearningOutcome', order: 17, isSelected: false },
+        { id: 'academic_calendar', name: 'AcademicCalendar', order: 18, isSelected: false },
         { id: 'event', name: 'Event', order: 19, isSelected: false },
     ];
 

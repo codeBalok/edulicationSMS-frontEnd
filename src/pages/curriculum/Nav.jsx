@@ -6,12 +6,12 @@ const Nav = () => {
     <div className="flex w-full justify-between items-center bg-gray-100 px-6 py-3 shadow fixed ">
                 <div className="flex gap-4">
                     <Link
-                            to = "/academic/grading-list"
+                            to = "/academic/curriculum-list"
                         className={`px-4 py-2 rounded-md`}
                     >
                         List
                     </Link>
-                    <Link to = '/academic/add-grading'
+                    <Link to = '/academic/add-curriculum'
                         className={`px-4 py-2 rounded-md`}
                     >
                         Create
