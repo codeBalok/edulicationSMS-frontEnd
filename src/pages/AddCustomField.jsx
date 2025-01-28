@@ -31,8 +31,19 @@ const AddCustomField = () => {
     };
 
     useEffect(() => {
-        // fetchData();
+        fetchData();
     }, []);
+
+    const fetchData = async () => {
+        try {
+            const hierarchyResponse = await api.fetchHierarchy(1);
+            const hierarchyData = hierarchyResponse.data;
+            setHierarchy(hierarchyData);
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
 
    
 

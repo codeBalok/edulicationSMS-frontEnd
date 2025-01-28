@@ -30,7 +30,7 @@ const CustomFieldRender = ({ customFields = [], initialData = {}, onFieldChange,
 
     const renderField = (field) => {
         const { id, name, type, options, isRequired } = field;
-        const parsedOptions = options ? JSON.parse(options) : [];
+        const parsedOptions = options ? options : [];
 
         switch (type) {
             case 'text':
@@ -41,6 +41,23 @@ const CustomFieldRender = ({ customFields = [], initialData = {}, onFieldChange,
                             {name} {isRequired && <span className="text-red-500">*</span>}
                         </label>
                         <input
+                            id={id}
+                            name={name}
+                            type={type}
+                            className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            value={formData[id] || ""}
+                            onChange={handleChange}
+                            required={isRequired}
+                        />
+                    </div>
+                );
+            case 'textarea':
+                return (
+                    <div className="mb-4" key={id}>
+                        <label htmlFor={name} className="block text-sm font-medium text-gray-700">
+                            {name} {isRequired && <span className="text-red-500">*</span>}
+                        </label>
+                        <textarea
                             id={id}
                             name={name}
                             type={type}

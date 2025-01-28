@@ -64,8 +64,8 @@ const [archive, setArchive] = useState("Archived");
 
     useEffect(() => {
        getParent()
+        getCustomField()
     }, [])
-
     const handleSubmit = (e) => {
       e.preventDefault();
       
