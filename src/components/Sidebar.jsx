@@ -1,6 +1,12 @@
 import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
 import { toKebabCase } from '../utils/stringUtils';
+import { IoSettingsOutline } from "react-icons/io5";
+import { MdOutlinePeopleAlt } from "react-icons/md";
+import { HiOutlineBookOpen } from "react-icons/hi";
+import { MdOutlineMailOutline } from "react-icons/md";
+import { MdChatBubbleOutline } from "react-icons/md";
+import { IoDocumentTextOutline } from "react-icons/io5";
 
 const Sidebar = ({ selectedItems }) => {
 
@@ -11,26 +17,37 @@ const Sidebar = ({ selectedItems }) => {
     };
     return (
         <>
-             <aside className="w-64 bg-gray-100 p-4 border-r border-gray-300 relative overflow-y-auto">
-                    <nav>
-                        <h2 className="text-lg font-semibold mb-4">Main Nav</h2>
-                        <ul>
-                            <li>
-                                <h3
-                                    className="text-sm font-semibold mb-2 cursor-pointer flex justify-between items-center"
+             <aside className="w-64 flex flex-col bg-white border-r-4  border-gray-50">
+                <nav className='h-[92%] overflow-y-auto'>
+                    {/* <div className='py-4 mb-4 border-b-2 fixed w-64 border-gray-50 p-4'> */}
+                    <div className='py-4 mb-4 w-64 bg-white border-r-4 border-b-2 border-gray-50 p-4 fixed'>
+                        <Link to = "/" className="text-lg font-semibold">Main Nav</Link>
+                    </div>
+                        <ul className='flex flex-col gap-4 p-4 mt-16'>
+                            <li className='flex items-center gap-3 cursor-pointer'>
+                               <MdOutlinePeopleAlt className='text-2xl' />
+                               <span>
+                                 Student
+                                </span>
+                            </li>
+                            <li className=''> 
+                            <div className='flex items-center gap-3 cursor-pointer mb-3'>
+                                <HiOutlineBookOpen className='text-2xl' />
+                                <span
+                                    className="cursor-pointer flex justify-between items-center"
                                     onClick={toggleAcademicDropdown}
                                 >
-                                    Academic
-                                    <span>{isAcademicOpen ? '▲' : '▼'}</span>
-                                </h3>
+                                   Academic  
+                                </span>
+                             </div>
                                 {isAcademicOpen && (
-                                    <ul className="ml-4 text-sm">
+                                    <ul className="flex px-10 flex-col gap-2 text-base">
                                         {selectedItems.map((item) => (
                                             <li
                                                 key={item}
                                                 className="mb-2 cursor-pointer hover:text-blue-500"
                                             >
-                                                <Link to = {`/academic/${toKebabCase(item)}`}>
+                                                <Link to = {`/academic/${toKebabCase(item)}-list`}>
                                                    {item}
                                                 </Link>
                                             </li>
@@ -38,47 +55,40 @@ const Sidebar = ({ selectedItems }) => {
                                     </ul>
                                 )}
                             </li>
-                            <li className="mt-4">Communication</li>
-                            <li className="mt-2">Email</li>
-                            <li className="mt-2">AVETMISS</li>
+                            <li className='flex items-center gap-3 cursor-pointer'>
+                               <MdChatBubbleOutline className='text-2xl' />
+                               <span>
+                                 Communication
+                                </span>
+                            </li>
+                            <li className='flex items-center gap-3 cursor-pointer'>
+                               <MdOutlineMailOutline className='text-2xl' />
+                               <span>
+                                 Email
+                                </span>
+                            </li>
+                            <li className='flex items-center gap-3 cursor-pointer'>
+                               <IoDocumentTextOutline className='text-2xl' />
+                               <span>
+                                 AVETMISS
+                                </span>
+                            </li>
                         </ul>
                     </nav>
 
                     {/* Settings at the bottom */}
-                    <div className="absolute bottom-4 left-4 right-4">
+                    <div className="h-[8%] flex items-center border-t-4 border-gray-50">
                     <Link
-                         to = "/academic-setting"
-                            className="w-full bg-gray-200 text-sm font-semibold py-2 px-4 rounded hover:bg-gray-300"
-                            // onClick={toggleSettingsSidebar}
-                        >
-                            Settings
+                         to = "/setting"
+                            className="px-4"
+                    >
+                        <div className='flex items-center gap-1'>
+                            <IoSettingsOutline className='text-2xl'/>
+                            <p className='text-lg'>Settings</p>
+                        </div>
                         </Link>
                     </div>
              </aside>
-
-                {/* Secondary Sidebar for Settings */}
-                {/* {true && (
-                    <aside className="w-64 bg-gray-50 p-4 border-r border-gray-300">
-                        <h2 className="text-lg font-semibold mb-4">Settings</h2>
-                        <ul className="text-sm">
-                            {selectedItems.map((item, index) => (
-                            <li
-                                key={item.id}
-                                className={`mb-2 p-2 rounded cursor-pointer ${
-                                    item.isSelected
-                                        ? 'bg-blue-100'
-                                        : 'hover:bg-gray-200'
-                                }`}
-                                onClick={() => handleItemSelect(item.id)}
-                            >
-                                <span>{item.name}</span>
-                            </li>
-                            
-                            ))}
-                        </ul>
-                    </aside>
-                )} */}
-
         </>
     );
 };

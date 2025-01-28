@@ -3,7 +3,10 @@ import Sidebar from '../../components/SideBar'
 import HierarchyContext from '../../contexts/HierarchyContext'
 import api from '../../api'
 import { Link } from 'react-router-dom'
-import Nav from './Nav'
+import Nav from '../../components/Nav'
+import CustomFieldRender from '../../components/CustomFieldRender'
+  
+
 
 const CourseAdd = () => {
 
@@ -31,6 +34,15 @@ const CourseAdd = () => {
   const [publicSessions, setPublicSessions] = useState("");
   const [privateSessions, setPrivateSessions] = useState("");
 
+  const [customFields, setCustomFields] = useState();
+    const [formData, setFormData] = useState({});
+
+ const getCustomField = async () => {
+        const response = await api.fetchCustomField("AcademicCalendar")
+        setCustomFields(response?.data)
+        console.log("this is respnse of custom fields::::", response?.data)
+    }
+
     const getParent = async () => {
         const response = await api.fetchCourseParent();
         setParent(response?.data.data)
@@ -46,6 +58,7 @@ const CourseAdd = () => {
 
     useEffect(() => {
        getParent()
+       getCustomField()
     }, [])
 
     const handleSubmit = (e) => {
@@ -79,7 +92,7 @@ const CourseAdd = () => {
                 selectedItems = {state}
             />
             <main className="flex-1 overflow-y-auto">
-                <Nav />
+                   <Nav link = "course" />
                  <form className="bg-white mt-16 p-6 w-[60%]" onSubmit={handleSubmit}>
       {/* Parent Dropdown */}
        {parent !== null && (
@@ -311,6 +324,11 @@ const CourseAdd = () => {
         ></textarea>
       </div>
 
+      <CustomFieldRender
+                    customFields={customFields}  
+                    onFieldChange={handleFieldChange} 
+                    initialData={formData}       
+          /> 
       <div className="flex">
         <button
           type="submit"

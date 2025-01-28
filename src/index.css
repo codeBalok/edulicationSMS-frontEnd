@@ -14,16 +14,12 @@
     @apply bg-blue-700;
   }
 
-
-/* Base styles for the item */
 .item {
     display: flex;
     align-items: center;
     padding: 10px;
-    margin: 5px 0;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    background-color: #dff0f12f;
+    border-radius: 7px;
     cursor: pointer;
     transition: background-color 0.2s, transform 0.2s;
 }
@@ -73,3 +69,22 @@
 .item:hover {
     background-color: #f1f3f5;
 }
+
+
+::-webkit-scrollbar {
+  width: 6px;
+} 
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #adbac7;
+  border-radius: 6px; 
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+  background: #adbac7;
+} 

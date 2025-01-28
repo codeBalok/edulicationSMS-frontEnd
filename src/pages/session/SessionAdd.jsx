@@ -3,8 +3,10 @@ import Sidebar from '../../components/SideBar'
 import HierarchyContext from '../../contexts/HierarchyContext'
 import api from '../../api'
 import { Link } from 'react-router-dom'
-import Nav from './Nav'
-
+import Nav from '../../components/Nav'
+import CustomFieldRender from '../../components/CustomFieldRender'
+ 
+          
 const SessionAdd = () => {
 
     const { state, dispatch } = useContext(HierarchyContext)
@@ -24,6 +26,14 @@ const SessionAdd = () => {
   const [dftEndHour, setDftEndHour] = useState("");
   const [dftEndMin, setDftEndMin] = useState("");
   const [dftEndAmPm, setDftEndAmPm] = useState("AM");
+   const [customFields, setCustomFields] = useState();
+    const [formData, setFormData] = useState({});
+
+ const getCustomField = async () => {
+        const response = await api.fetchCustomField("AcademicCalendar")
+        setCustomFields(response?.data)
+        console.log("this is respnse of custom fields::::", response?.data)
+    }
   
     const getParent = async () => {
         const response = await api.fetchSessionParent();
@@ -40,6 +50,7 @@ const SessionAdd = () => {
 
     useEffect(() => {
        getParent()
+       getCustomField()
     }, [])
 
     const handleSubmit = (e) => {
@@ -71,7 +82,7 @@ const SessionAdd = () => {
                 selectedItems = {state}
             />
             <main className="flex-1 overflow-y-auto">
-                <Nav />
+              <Nav link = "session" />
           <form className="bg-white mt-16 p-6 w-[60%]" onSubmit={handleSubmit}>
              {parent !== null && (
         <div className="mb-4">
@@ -213,6 +224,12 @@ const SessionAdd = () => {
     </select>
   </div>
 
+  <CustomFieldRender
+                    customFields={customFields}  
+                    onFieldChange={handleFieldChange} 
+                    initialData={formData}       
+            /> 
+            
   {/* Submit Button */}
   <div className="flex">
     <button

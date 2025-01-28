@@ -4,9 +4,10 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import Item from './components/Item';
 import api from './api';
-import CustomFieldForm from './components/CustomFieldForm';
+// import CustomFieldForm from './components/CustomFieldForm';
 import CustomFieldList from './components/CustomFieldList'
 import Sidebar from './components/SideBar';
+import CustomFieldForm from './components/CustomFieldForm';
 
 const App = () => {
     const initialAcademicItems = [
@@ -246,8 +247,8 @@ const App = () => {
                 toggleAcademicDropdown={toggleAcademicDropdown}
             />
                 {/* Main Content */}
-                <main className="flex-1 p-6">
-
+                <main className="flex-1 p-6 overflow-y-auto">
+                    <CustomFieldForm academicItems = {academicItems} instituteId = '1' />
                 </main>
             </div>
     );

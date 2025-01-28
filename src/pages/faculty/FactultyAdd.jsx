@@ -3,7 +3,9 @@ import Sidebar from '../../components/SideBar'
 import HierarchyContext from '../../contexts/HierarchyContext'
 import api from '../../api'
 import { Link } from 'react-router-dom'
-import Nav from './Nav'
+import Nav from '../../components/Nav'
+import CustomFieldRender from '../../components/CustomFieldRender'
+
 
 const FacultyAdd = () => {
 
@@ -14,16 +16,57 @@ const FacultyAdd = () => {
     const [title, setTitle] = useState('');
     const [shortcode, setShortcode] = useState('');
 
+    const [customFields, setCustomFields] = useState();
+    const [formData, setFormData] = useState({});
+
+    useEffect(() => {
+        getParent()
+        getCustomField()
+    }, [])
+    
+    useEffect(() => {
+        console.log("this is faculty parent::",parent)
+    },[[parent]])
+
+    // const customFields = [
+    //     {
+    //         name: "age",
+    //         label: "Age",
+    //         type: "number",
+    //         isRequired: true,
+    //         defaultValue: 18
+    //     },
+    //     {
+    //         name: "favorites",
+    //         label: "Favorite Color",
+    //         type: "select",
+    //         options: ["Red", "Green", "Blue", "Yellow"],
+    //         isRequired: true
+    //     },
+    //     {
+    //         name: "terms",
+    //         label: "Accept Terms",
+    //         type: "checkbox",
+    //         isRequired: true
+    //     }
+    // ];
+
+    const handleFieldChange = (updatedData) => {
+        setFormData(updatedData); 
+    };
+
     const getParent = async () => {
         const response = await api.fetchFacultiesParent();
         setParent(response?.data.data)
         
     }
+    
+    const getCustomField = async () => {
+        const response = await api.fetchCustomField("faculty")
+        setCustomFields(response?.data)
+        console.log("this is respnse of custom fields::::", response?.data)
+    }
 
-    useEffect(() => {
-
-        console.log("this is faculty parent::",parent)
-    },[[parent]])
 
 
     const sendFaculty = async (data) => {
@@ -33,18 +76,19 @@ const FacultyAdd = () => {
         }
     }
 
-    useEffect(() => {
-       getParent()
-    }, [])
+  
 
     const handleSubmit = (e) => {
+
         e.preventDefault();
-        const formData = {
-            title: title,
-            shortcode: shortcode,
-            ...(parentId && parent && { parent_id: parentId }) 
-        }
-        sendFaculty(formData)
+        console.log("Form Data Submitted: ", formData);
+        // e.preventDefault();
+        // const formData = {
+        //     title: title,
+        //     shortcode: shortcode,
+        //     ...(parentId && parent && { parent_id: parentId }) 
+        // }
+        // sendFaculty(formData)
     };
 
     return (
@@ -53,7 +97,7 @@ const FacultyAdd = () => {
                 selectedItems = {state}
             />
             <main className="flex-1">
-               <Nav />
+             <Nav link = "faculty" />
                   <form
             className="bg-white p-6 d w-[60%] mt-16"
             onSubmit={handleSubmit}
@@ -121,6 +165,11 @@ const FacultyAdd = () => {
                     onChange={(e) => setShortcode(e.target.value)}
                 /> */}
             </div>
+             <CustomFieldRender
+                    customFields={customFields}  
+                    onFieldChange={handleFieldChange} 
+                    initialData={formData}       
+                />        
 
             {/* Save Button */}
             <div className="flex">

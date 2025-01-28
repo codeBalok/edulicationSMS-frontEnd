@@ -1,10 +1,12 @@
 import React, {useEffect, useContext, useState} from 'react'
-import Sidebar from '../../components/SideBar'
+import Sidebar from '../../components/Sidebar'
 import HierarchyContext from '../../contexts/HierarchyContext'
 import api from '../../api'
 import { Link } from 'react-router-dom'
 import { parentExtractor } from '../../utils/stringUtils'
-import Nav from './Nav'
+import Nav from '../../components/Nav'
+import { BiSolidEdit } from 'react-icons/bi'
+import { RiDeleteBin6Line } from 'react-icons/ri'
 
 const SessionList = () => {
 
@@ -31,10 +33,8 @@ const SessionList = () => {
                 selectedItems = {state}
             />
             <main className="flex-1">
-
-                <Nav />
-                
-                <div className="overflow-x-auto mt-32 bg-white shadow px-4">
+               <Nav link = "session" />
+                <div className="overflow-x-auto mt-24 bg-white shadow px-4">
             <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-blue-500">
                     <tr>
@@ -69,16 +69,16 @@ const SessionList = () => {
                             </td>
                             <td className="px-4 py-2 text-sm">
                                 <button
-                                    className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                                    className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                                     title="Edit"
                                 >
-                                    ✏️
+                                    <BiSolidEdit className='text-lg font-semibold' />
                                 </button>
                                 <button
-                                    className="px-2 py-1 ml-2 bg-red-500 text-white rounded hover:bg-red-600"
+                                    className="p-2 ml-2 bg-red-500 text-white rounded hover:bg-red-600"
                                     title="Delete"
                                 >
-                                    🗑️
+                                    <RiDeleteBin6Line className='text-lg font-semibold'  />
                                 </button>
                             </td>
                         </tr>

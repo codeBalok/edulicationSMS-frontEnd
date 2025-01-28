@@ -3,6 +3,9 @@ import Sidebar from '../../components/SideBar'
 import HierarchyContext from '../../contexts/HierarchyContext'
 import api from '../../api'
 import { Link } from 'react-router-dom'
+import Nav from '../../components/Nav'
+import CustomFieldRender from '../../components/CustomFieldRender'
+  
 
 const ProgramAdd = () => {
 
@@ -12,6 +15,16 @@ const ProgramAdd = () => {
     const [parentId, setParentId] = useState('');
     const [title, setTitle] = useState('');
     const [shortcode, setShortcode] = useState('');
+
+    const [customFields, setCustomFields] = useState();
+    const [formData, setFormData] = useState({});
+
+ const getCustomField = async () => {
+        const response = await api.fetchCustomField("AcademicCalendar")
+        setCustomFields(response?.data)
+        console.log("this is respnse of custom fields::::", response?.data)
+    }
+
 
     const getParent = async () => {
         const response = await api.fetchProgramParent();
@@ -28,6 +41,7 @@ const ProgramAdd = () => {
 
     useEffect(() => {
        getParent()
+       getCustomField()
     }, [])
 
     const handleSubmit = (e) => {
@@ -46,23 +60,9 @@ const ProgramAdd = () => {
                 selectedItems = {state}
             />
             <main className="flex-1">
-                <div className="flex justify-between items-center bg-gray-100 px-6 py-3 shadow">
-                <div className="flex gap-4">
-                    <Link
-                            to = "/academic/program-list"
-                        className={`px-4 py-2 rounded-md`}
-                    >
-                        List
-                    </Link>
-                    <Link to = '/academic/add-program'
-                        className={`px-4 py-2 rounded-md`}
-                    >
-                        Create
-                    </Link>
-                </div>
-            </div>
+                <Nav link = "program" />
                   <form
-            className="bg-white p-6 d w-[60%]"
+            className="bg-white p-6 d w-[60%] mt-16"
             onSubmit={handleSubmit}
         >
             {/* Faculty Dropdown */}
@@ -120,6 +120,11 @@ const ProgramAdd = () => {
                 />
             </div>
 
+                    <CustomFieldRender
+                    customFields={customFields}  
+                    onFieldChange={handleFieldChange} 
+                    initialData={formData}       
+          /> 
             {/* Save Button */}
             <div className="flex">
                 <button

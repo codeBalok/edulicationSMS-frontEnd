@@ -3,7 +3,10 @@ import Sidebar from '../../components/SideBar'
 import HierarchyContext from '../../contexts/HierarchyContext'
 import api from '../../api'
 import { Link } from 'react-router-dom'
-import Nav from './Nav'
+import Nav from '../../components/Nav'
+import CustomFieldRender from '../../components/CustomFieldRender'
+  
+
 
 const ClassRoomAdd = () => {
 
@@ -16,6 +19,15 @@ const ClassRoomAdd = () => {
   const [capacity, setCapacity] = useState("");
   const [type, setType] = useState("");
   const [description, setDescription] = useState("");
+
+  const [customFields, setCustomFields] = useState();
+    const [formData, setFormData] = useState({});
+
+ const getCustomField = async () => {
+        const response = await api.fetchCustomField("AcademicCalendar")
+        setCustomFields(response?.data)
+        console.log("this is respnse of custom fields::::", response?.data)
+    }
 
   
     const getParent = async () => {
@@ -33,6 +45,7 @@ const ClassRoomAdd = () => {
 
     useEffect(() => {
        getParent()
+       getCustomField()
     }, [])
 
     const handleSubmit = (e) => {
@@ -56,7 +69,7 @@ const ClassRoomAdd = () => {
                 selectedItems = {state}
             />
             <main className="flex-1 overflow-y-auto">
-          <Nav />
+         <Nav link = "class-room" />
           
           <form className="bg-white mt-16 p-6 w-[60%]" onSubmit={handleSubmit}>
 
@@ -148,7 +161,12 @@ const ClassRoomAdd = () => {
       onChange={(e) => setDescription(e.target.value)}
     />
   </div>
-         
+
+  <CustomFieldRender
+                    customFields={customFields}  
+                    onFieldChange={handleFieldChange} 
+                    initialData={formData}       
+          />      
   {/* Submit Button */}
   <div className="flex">
     <button

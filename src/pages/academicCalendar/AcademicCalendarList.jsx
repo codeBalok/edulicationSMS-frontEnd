@@ -1,10 +1,12 @@
 import React, {useEffect, useContext, useState} from 'react'
-import Sidebar from '../../components/SideBar'
+import Sidebar from '../../components/Sidebar'
 import HierarchyContext from '../../contexts/HierarchyContext'
 import api from '../../api'
 import { Link } from 'react-router-dom'
 import { parentExtractor } from '../../utils/stringUtils'
-import Nav from './Nav'
+import Nav from '../../components/Nav'
+import { BiSolidEdit } from "react-icons/bi";
+
 
 const AcademicCalendarAddList = () => {
 
@@ -32,9 +34,9 @@ const AcademicCalendarAddList = () => {
             />
             <main className="flex-1">
 
-                <Nav />
+               <Nav link = "academic-calendar" />
                 
-                <div className="overflow-x-auto mt-32 bg-white shadow px-4">
+                <div className="overflow-x-auto mt-24 bg-white shadow px-4">
             <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-blue-500">
                     <tr>
@@ -78,7 +80,7 @@ const AcademicCalendarAddList = () => {
                                     className="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
                                     title="Edit"
                                 >
-                                    ✏️
+                                   <BiSolidEdit />
                                 </button>
                                 <button
                                     className="px-2 py-1 ml-2 bg-red-500 text-white rounded hover:bg-red-600"

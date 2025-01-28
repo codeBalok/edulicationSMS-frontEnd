@@ -3,7 +3,9 @@ import Sidebar from '../../components/SideBar'
 import HierarchyContext from '../../contexts/HierarchyContext'
 import api from '../../api'
 import { Link } from 'react-router-dom'
-import Nav from './Nav'
+import Nav from '../../components/Nav'
+import CustomFieldRender from '../../components/CustomFieldRender'
+  
 
 const LearningOutcomeAdd = () => {
 
@@ -17,6 +19,15 @@ const LearningOutcomeAdd = () => {
   const [performanceCriteria, setPerformanceCriteria] = useState("");
   const [mapping, setMapping] = useState("");
   const [description, setDescription] = useState("");
+
+  const [customFields, setCustomFields] = useState();
+    const [formData, setFormData] = useState({});
+
+ const getCustomField = async () => {
+        const response = await api.fetchCustomField("AcademicCalendar")
+        setCustomFields(response?.data)
+        console.log("this is respnse of custom fields::::", response?.data)
+    }
 
   
     const getParent = async () => {
@@ -34,6 +45,7 @@ const LearningOutcomeAdd = () => {
 
     useEffect(() => {
        getParent()
+       getCustomField()
     }, [])
 
     const handleSubmit = (e) => {
@@ -59,7 +71,7 @@ const LearningOutcomeAdd = () => {
                 selectedItems = {state}
             />
             <main className="flex-1 overflow-y-auto">
-          <Nav />
+           <Nav link = "learning-outcome" />
           
           <form className="bg-white mt-16 p-6 w-[60%]" onSubmit={handleSubmit}>
 
@@ -183,6 +195,12 @@ const LearningOutcomeAdd = () => {
     />
   </div>
          
+  <CustomFieldRender
+                    customFields={customFields}  
+                    onFieldChange={handleFieldChange} 
+                    initialData={formData}       
+          /> 
+
   {/* Submit Button */}
   <div className="flex">
     <button

@@ -8,11 +8,8 @@ import CustomFieldForm from '../components/CustomFieldForm';
 import CustomFieldList from '../components/CustomFieldList'
 import Sidebar from '../components/SideBar';
 import SettingsSidebar from '../components/SettingsSidebar';
-import AcademicSettingsSidebar from '../components/AcademicSettingsSidebar';
-import { FiSave } from "react-icons/fi";
 
-
-const AcademicSetting = () => {
+const Setting = () => {
 
     const initialAcademicItems = [
         { id: 'faculty', name: 'Faculty', order: 1, isSelected: false },
@@ -67,8 +64,6 @@ const AcademicSetting = () => {
 
     const fetchData = async () => {
         try {
-            // const instituteResponse = await api.fetchInstitute(instituteId);
-            // const institute = instituteResponse.data;
             const hierarchyResponse = await api.fetchHierarchy(1);
             const hierarchyData = hierarchyResponse.data;
             setHierarchy(hierarchyData);
@@ -163,15 +158,6 @@ const AcademicSetting = () => {
         }
     };
 
-    // const handleItemSelect = (id) => {
-    //     const updatedItems = academicItems.map(item =>
-    //         item.id === id ? { ...item, isSelected: !item.isSelected } : item
-    //     );
-    //     // setAcademicItems(updatedItems);
-    //     const selectedItems = updatedItems.filter(item => item.isSelected);
-    //     setSelectedItems(selectedItems);
-    // };
-
     const handleItemSelect = (id) => {
     const updatedItems = academicItems.map(item =>
         item.id === id ? { ...item, isSelected: !item.isSelected } : item
@@ -198,11 +184,10 @@ const AcademicSetting = () => {
 };
 
 
-
     const handleSaveHierarchy = async () => {
         try {
             const hierarchyData = selectedItems.map(item => item.name);
-            await api.createHierarchy(instituteId, { hierarchy: hierarchyData });
+            await api.saveHierarchy(instituteId, { hierarchy: hierarchyData });
             setHierarchy(hierarchyData);
             alert('Hierarchy saved successfully!');
         } catch (error) {
@@ -271,46 +256,41 @@ const AcademicSetting = () => {
             />
             {/* Main Content */}
             <main className="flex flex-grow">
-                <div className='h-full w-[20%]'>
-                    <AcademicSettingsSidebar
+                <div className='h-full w-[20%] overflow-y-auto'>
+                    <SettingsSidebar
                         academicItems={academicItems}
+                        selectedItems={hierarchy}
                         //  isSelected={isSelected}
                         onSelect={handleItemSelect}
                     // onMove={handleItemMove}
                     />
                 </div>
-                <div className='h-full p-4 w-[80%]  overflow-y-auto'>
-                    <div className='flex flex-col border-2 rounded-lg border-gray-50 p-4'>
-                        <div className="items-container grid grid-cols-1 gap-2">
-                            {selectedItems.map((item, index) => (
-                                <Item
-                                    key={item.id}
-                                    id={item.id}
-                                    name={item.name}
-                                    order={index}
-                                    isSelected={item.isSelected}
-                                    onSelect={handleItemSelect}
-                                    onMove={handleItemMove}
-                                />
-                            ))}
-                        </div>
-                        <div className='flex justify-end'>
-                            <button
-                                className="flex justify-center items-center gap-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mt-4"
-                                onClick={handleSaveHierarchy}
-                            >
-                                <FiSave />
-                                <span>
-                                Save
-                                </span>
-                            </button>
-                        </div>
+                {/* <div className='h-full w-[80%] overflow-y-auto'>
+                    <h1 className="text-xl font-bold mb-4">Academic Item Hierarchy</h1>
+                    <div className="items-container grid grid-cols-1 gap-4">
+                        {selectedItems.map((item, index) => (
+                            <Item
+                                key={item.id}
+                                id={item.id}
+                                name={item.name}
+                                order={index}
+                                isSelected={item.isSelected}
+                                onSelect={handleItemSelect}
+                                onMove={handleItemMove}
+                            />
+                        ))}
                     </div>
-                </div>
+                    <button
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+                        onClick={handleSaveHierarchy}
+                    >
+                        Save Hierarchy
+                    </button>
+                </div> */}
             </main>
         </div>
     );
 };
 
-export default AcademicSetting
+export default Setting
 

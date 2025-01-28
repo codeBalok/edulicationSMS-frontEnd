@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api';
+import { useParams } from 'react-router-dom';
 
-const CustomFieldForm = ({ academicItem, onClose, instituteId }) => {
+const CustomFieldForm = ({ onClose, instituteId }) => {
+
+    const { type } = useParams()
     const [title, setTitle] = useState('');
     const [isRequired, setIsRequired] = useState(false);
     const [fieldType, setFieldType] = useState('text');
@@ -12,38 +15,23 @@ const CustomFieldForm = ({ academicItem, onClose, instituteId }) => {
     const [description, setDescription] = useState('');
     const [fieldOptions, setFieldOptions] = useState([]);
 
-    useEffect(() => {
-        if (academicItem) {
-            fetchFieldOptions();
-        }
-    }, [academicItem]);
-
-    const fetchFieldOptions = async () => {
-        try {
-            const response = await api.fetchCustomFields();
-            const filteredOptions = response.data.filter(field => field.academic_item === academicItem);
-            setFieldOptions(filteredOptions);
-        } catch (error) {
-            console.error('Error fetching custom fields:', error);
-        }
-    };
-
     const handleSubmit = async (e) => {
 
         e.preventDefault();
         try {
             const data = {
-                academic_item_id: academicItem,
-                label: title,
+                name: title,
                 is_required: isRequired,
-                field_type: fieldType,
+                type: fieldType,
+                item_type: type,
                 show_in_table: showInTableView,
                 allow_export: allowExportInTableView,
                 options,
                 default_value: defaultValue,
                 description,
             };
-            await api.createCustomField(instituteId,data);
+            console.log("fielsss:",data)
+            await api.createCustomField(data);
             alert('Custom field created successfully!');
             onClose();
         } catch (error) {
@@ -60,64 +48,142 @@ const CustomFieldForm = ({ academicItem, onClose, instituteId }) => {
     };
 
     return (
-        <div className="custom-field-form">
-            <h2>Add Custom Field for {academicItem}</h2>
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label>Title/Label:</label>
-                    <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
-                </div>
-                <div className="form-group">
-                    <label>Is Required:</label>
-                    <div className="radio-group">
-                        <label>
-                            <input type="radio" value={true} checked={isRequired === true} onChange={() => setIsRequired(true)} /> Yes
-                        </label>
-                        <label>
-                            <input type="radio" value={false} checked={isRequired === false} onChange={() => setIsRequired(false)} /> No
-                        </label>
-                    </div>
-                </div>
-                <div className="form-group">
-                    <label>Field Type:</label>
-                    <select value={fieldType} onChange={handleFieldTypeChange}>
-                        <option value="text">Text</option>
-                        <option value="textarea">Textarea</option>
-                        <option value="number">Number</option>
-                        <option value="select">Select</option>
-                        <option value="radio">Radio</option>
-                        <option value="checkbox">Checkbox</option>
-                        <option value="file">File</option>
-                    </select>
-                </div>
-                {['select', 'radio', 'checkbox'].includes(fieldType) && (
-                    <div className="form-group">
-                        <label>Options (comma-separated):</label>
-                        <textarea value={options} onChange={(e) => setOptions(e.target.value)} />
-                    </div>
-                )}
-                <div className="form-group">
-                    <label>Show in Table View:</label>
-                    <input type="checkbox" checked={showInTableView} onChange={() => setShowInTableView(!showInTableView)} />
-                </div>
-                <div className="form-group">
-                    <label>Allow Export in Table View:</label>
-                    <input type="checkbox" checked={allowExportInTableView} onChange={() => setAllowExportInTableView(!allowExportInTableView)} />
-                </div>
-                <div className="form-group">
-                    <label>Default Value:</label>
-                    <input type="text" value={defaultValue} onChange={(e) => setDefaultValue(e.target.value)} />
-                </div>
-                <div className="form-group">
-                    <label>Description:</label>
-                    <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
-                </div>
-                <div className="form-group">
-                    <button type="submit">Save Custom Field</button>
-                    <button type="button" onClick={onClose}>Cancel</button>
-                </div>
-            </form>
+      <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg ">
+    <h2 className="text-2xl font-semibold mb-6 text-gray-800">
+        {/* Add Custom Field for {academicItem} */}
+    </h2>
+    <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Title/Label */}
+        <div className="form-group">
+            <label className="block text-sm font-medium text-gray-700">Title/Label</label>
+            <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            />
         </div>
+
+        {/* Is Required */}
+        <div className="form-group">
+            <label className="block text-sm font-medium text-gray-700">Is Required</label>
+            <div className="flex space-x-4 mt-2">
+                <label className="flex items-center">
+                    <input
+                        type="radio"
+                        value={true}
+                        checked={isRequired === true}
+                        onChange={() => setIsRequired(true)}
+                        className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                    />
+                    <span className="ml-2 text-sm text-gray-700">Yes</span>
+                </label>
+                <label className="flex items-center">
+                    <input
+                        type="radio"
+                        value={false}
+                        checked={isRequired === false}
+                        onChange={() => setIsRequired(false)}
+                        className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                    />
+                    <span className="ml-2 text-sm text-gray-700">No</span>
+                </label>
+            </div>
+        </div>
+
+        {/* Field Type */}
+        <div className="form-group">
+            <label className="block text-sm font-medium text-gray-700">Field Type</label>
+            <select
+                value={fieldType}
+                onChange={handleFieldTypeChange}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            >
+                <option value="text">Text</option>
+                <option value="textarea">Textarea</option>
+                <option value="number">Number</option>
+                <option value="select">Select</option>
+                <option value="radio">Radio</option>
+                <option value="checkbox">Checkbox</option>
+                <option value="file">File</option>
+            </select>
+        </div>
+
+        {/* Options */}
+        {['select', 'radio', 'checkbox'].includes(fieldType) && (
+            <div className="form-group">
+                <label className="block text-sm font-medium text-gray-700">Options (comma-separated)</label>
+                <textarea
+                    value={options}
+                    onChange={(e) => setOptions(e.target.value)}
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                />
+            </div>
+        )}
+
+        {/* Show in Table View */}
+        <div className="form-group flex items-center">
+            <input
+                type="checkbox"
+                checked={showInTableView}
+                onChange={() => setShowInTableView(!showInTableView)}
+                className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+            />
+            <label className="ml-2 text-sm text-gray-700">Show in Table View</label>
+        </div>
+
+        {/* Allow Export */}
+        <div className="form-group flex items-center">
+            <input
+                type="checkbox"
+                checked={allowExportInTableView}
+                onChange={() => setAllowExportInTableView(!allowExportInTableView)}
+                className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+            />
+            <label className="ml-2 text-sm text-gray-700">Allow Export in Table View</label>
+        </div>
+
+        {/* Default Value */}
+        <div className="form-group">
+            <label className="block text-sm font-medium text-gray-700">Default Value</label>
+            <input
+                type="text"
+                value={defaultValue}
+                onChange={(e) => setDefaultValue(e.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            />
+        </div>
+
+        {/* Description */}
+        <div className="form-group">
+            <label className="block text-sm font-medium text-gray-700">Description</label>
+            <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            />
+        </div>
+
+        {/* Buttons */}
+        <div className="flex space-x-4">
+            <button
+                type="submit"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 focus:ring focus:ring-blue-500"
+            >
+                Save Custom Field
+            </button>
+            <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg shadow hover:bg-gray-400 focus:ring focus:ring-gray-400"
+            >
+                Cancel
+            </button>
+        </div>
+    </form>
+</div>
+
     );
 };
 

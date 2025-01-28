@@ -3,7 +3,9 @@ import Sidebar from '../../components/SideBar'
 import HierarchyContext from '../../contexts/HierarchyContext'
 import api from '../../api'
 import { Link } from 'react-router-dom'
-import Nav from './Nav'
+import Nav from '../../components/Nav'
+import CustomFieldRender from '../../components/CustomFieldRender'
+
 
 const DepartmentAdd = () => {
 
@@ -13,6 +15,15 @@ const DepartmentAdd = () => {
     const [parentId, setParentId] = useState('');
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+
+    const [customFields, setCustomFields] = useState();
+    const [formData, setFormData] = useState({});
+
+ const getCustomField = async () => {
+        const response = await api.fetchCustomField("AcademicCalendar")
+        setCustomFields(response?.data)
+        console.log("this is respnse of custom fields::::", response?.data)
+    }
 
     const getParent = async () => {
         const response = await api.fetchDepartmentsParent();
@@ -47,9 +58,9 @@ const DepartmentAdd = () => {
                 selectedItems = {state}
             />
             <main className="flex-1">
-               <Nav />
+             <Nav link = "department" />
                   <form
-            className="bg-white p-6 d w-[60%]"
+            className="bg-white mt-16 p-6 d w-[60%]"
             onSubmit={handleSubmit}
         >
                     {/* Faculty Dropdown */}
@@ -117,6 +128,11 @@ const DepartmentAdd = () => {
                 /> */}
             </div>
 
+                    <CustomFieldRender
+                    customFields={customFields}  
+                    onFieldChange={handleFieldChange} 
+                    initialData={formData}       
+          /> 
             {/* Save Button */}
             <div className="flex">
                 <button
