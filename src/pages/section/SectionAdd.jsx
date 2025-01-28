@@ -18,14 +18,17 @@ const SectionAdd = () => {
   const [status, setStatus] = useState(1);
 
   const [customFields, setCustomFields] = useState();
-    const [formData, setFormData] = useState({});
-
+    const [customFieldData, setCustomFieldData] = useState({});
+    
  const getCustomField = async () => {
-        const response = await api.fetchCustomField("AcademicCalendar")
+        const response = await api.fetchCustomField("Section")
         setCustomFields(response?.data)
         console.log("this is respnse of custom fields::::", response?.data)
-    }
-
+      }
+      
+      const handleFieldChange = (updatedData) => {
+              setCustomFieldData(updatedData); 
+          };
   
     const getParent = async () => {
         const response = await api.fetchSectionParent();
@@ -46,16 +49,23 @@ const SectionAdd = () => {
     }, [])
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+      e.preventDefault();
       
+        const result = Object.entries(customFieldData).map(([id, value]) => ({
+      id: parseInt(id), 
+            value,
+        }));
+
+          
       const formData = {
             title,
-        seat,
+            seat,
             status,
-          ...(parentId && parent && { parent_id: parentId }),
-        }
-      sendSection(formData)
-
+            ...(parentId && parent && { parent_id: parentId }),
+            custom_field: result
+          }
+          sendSection(formData)
+          
     };
 
     return (
@@ -134,11 +144,11 @@ const SectionAdd = () => {
     </select>
   </div>
 
-  <CustomFieldRender
+ <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={formData}       
-          />           
+                    initialData={customFieldData}       
+          />        
 
   {/* Submit Button */}
   <div className="flex">

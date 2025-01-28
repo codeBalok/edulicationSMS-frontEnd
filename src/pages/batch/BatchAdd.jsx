@@ -18,13 +18,17 @@ const BatchAdd = () => {
   const [startDate, setStartDate] = useState("");
 
   const [customFields, setCustomFields] = useState();
-    const [formData, setFormData] = useState({});
+  const [customFieldData, setCustomFieldData] = useState({});
 
  const getCustomField = async () => {
-        const response = await api.fetchCustomField("AcademicCalendar")
+        const response = await api.fetchCustomField("Batch")
         setCustomFields(response?.data)
         console.log("this is respnse of custom fields::::", response?.data)
-    }
+  }
+  
+  const handleFieldChange = (updatedData) => {
+        setCustomFieldData(updatedData); 
+    };
   
     const getParent = async () => {
         const response = await api.fetchBatchParent();
@@ -45,11 +49,18 @@ const BatchAdd = () => {
     }, [])
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+      e.preventDefault();
+      
+       const result = Object.entries(customFieldData).map(([id, value]) => ({
+            id: parseInt(id), 
+            value,
+        }));
+
         const formData = {
           title,
           start_date: startDate,
-      ...(parentId && parent && { parent_id: parentId }),
+          ...(parentId && parent && { parent_id: parentId }),
+       custom_field: result
         }
     sendBatch(formData)
     };
@@ -113,12 +124,12 @@ const BatchAdd = () => {
   />
   </div>
             
-            <CustomFieldRender
+            
+<CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={formData}       
+                    initialData={customFieldData}       
           /> 
-
       <div className="flex">
         <button
           type="submit"

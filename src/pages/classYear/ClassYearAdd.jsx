@@ -22,15 +22,18 @@ const ClassYearAdd = () => {
   const [intake, setIntake] = useState("fall");
   const [description, setDescription] = useState("");
    const [customFields, setCustomFields] = useState();
-    const [formData, setFormData] = useState({});
-
+  const [customFieldData, setCustomFieldData] = useState({});
+          
  const getCustomField = async () => {
-        const response = await api.fetchCustomField("AcademicCalendar")
+        const response = await api.fetchCustomField("ClassYear")
         setCustomFields(response?.data)
         console.log("this is respnse of custom fields::::", response?.data)
     }
+    
 
-
+    const handleFieldChange = (updatedData) => {
+            setCustomFieldData(updatedData); 
+        };
   
     const getParent = async () => {
         const response = await api.fetchClassYearParent();
@@ -51,7 +54,12 @@ const ClassYearAdd = () => {
     }, [])
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+      e.preventDefault();
+      
+      const result = Object.entries(customFieldData).map(([id, value]) => ({
+            id: parseInt(id), 
+            value,
+        }));
       
       const formData = {
         title,
@@ -62,6 +70,7 @@ const ClassYearAdd = () => {
         intake: intake,
         description,
         ...(parentId && parent && { parent_id: parentId }),
+        custom_field: result
       }
       sendClassYear(formData)
 
@@ -201,8 +210,8 @@ const ClassYearAdd = () => {
     <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={formData}       
-            /> 
+                    initialData={customFieldData}       
+          /> 
             
   {/* Submit Button */}
   <div className="flex">

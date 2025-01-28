@@ -36,14 +36,18 @@ const [archive, setArchive] = useState("Archived");
   const [description, setDescription] = useState("");
 
    const [customFields, setCustomFields] = useState();
-    const [formData, setFormData] = useState({});
+   const [customFieldData, setCustomFieldData] = useState({});
+   
 
  const getCustomField = async () => {
-        const response = await api.fetchCustomField("AcademicCalendar")
+        const response = await api.fetchCustomField("Event")
         setCustomFields(response?.data)
         console.log("this is respnse of custom fields::::", response?.data)
-    }
-
+      }
+      
+      const handleFieldChange = (updatedData) => {
+              setCustomFieldData(updatedData); 
+          };
   
     const getParent = async () => {
         const response = await api.fetchEventParent();
@@ -63,9 +67,15 @@ const [archive, setArchive] = useState("Archived");
     }, [])
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+      e.preventDefault();
       
-      const formData = {
+       const result = Object.entries(customFieldData).map(([id, value]) => ({
+     id: parseInt(id), 
+            value,
+        }));
+
+      
+    const formData = {
       course_type: courseType,
       reporting_state: reportingState,
       course_name: courseName,
@@ -82,8 +92,9 @@ const [archive, setArchive] = useState("Archived");
       selects_units: selectUnits,
       delivery_mode: deliveryMode,
       predominant_delivery_mode: predominantDeliveryMode,
-        ...(parentId && parent && { parent_id: parentId }),
-      }
+      ...(parentId && parent && { parent_id: parentId }),
+      custom_field: result
+    }
       console.log("EVT::", formData)
       sendEvent(formData)
 
@@ -207,8 +218,8 @@ const [archive, setArchive] = useState("Archived");
   <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={formData}       
-            /> 
+                    initialData={customFieldData}       
+                    /> 
             
   {/* Submit Button */}
   <div className="flex">

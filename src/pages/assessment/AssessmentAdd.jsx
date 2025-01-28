@@ -28,13 +28,18 @@ const AssessmentAdd = () => {
   const [description, setDescription] = useState("");
 
     const [customFields, setCustomFields] = useState();
-    const [formData, setFormData] = useState({});
+    const [customFieldData, setCustomFieldData] = useState({});
+
 
  const getCustomField = async () => {
-        const response = await api.fetchCustomField("AcademicCalendar")
+        const response = await api.fetchCustomField("Assessment")
         setCustomFields(response?.data)
         console.log("this is respnse of custom fields::::", response?.data)
     }
+
+  const handleFieldChange = (updatedData) => {
+        setCustomFieldData(updatedData); 
+    };
 
 
   
@@ -57,7 +62,12 @@ const AssessmentAdd = () => {
     }, [])
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+      e.preventDefault();
+      
+      const result = Object.entries(customFieldData).map(([id, value]) => ({
+            id: parseInt(id), 
+            value,
+        }));
       
       const formData = {
         title,
@@ -72,6 +82,7 @@ const AssessmentAdd = () => {
         rubric,
         description,
         ...(parentId && parent && { parent_id: parentId }),
+         custom_field: result
       }
       console.log("subj::", formData)
       sentAssessment(formData)
@@ -257,11 +268,11 @@ const AssessmentAdd = () => {
     />
   </div>
 
-    <CustomFieldRender
+   <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={formData}       
-          />         
+                    initialData={customFieldData}       
+          />       
   {/* Submit Button */}
   <div className="flex">
     <button

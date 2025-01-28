@@ -17,10 +17,10 @@ const DepartmentAdd = () => {
     const [description, setDescription] = useState('');
 
     const [customFields, setCustomFields] = useState();
-    const [formData, setFormData] = useState({});
+    const [customFieldData, setCustomFieldData] = useState({});
 
  const getCustomField = async () => {
-        const response = await api.fetchCustomField("AcademicCalendar")
+        const response = await api.fetchCustomField("Department")
         setCustomFields(response?.data)
         console.log("this is respnse of custom fields::::", response?.data)
     }
@@ -31,6 +31,11 @@ const DepartmentAdd = () => {
         console.log("dpp:::",response)
     }
 
+     const handleFieldChange = (updatedData) => {
+        setCustomFieldData(updatedData); 
+    };
+
+
     const sendProgram = async (data) => {
         const response = await api.createDepartment(data);
         if (response.status !== 201) {
@@ -39,15 +44,22 @@ const DepartmentAdd = () => {
     }
 
     useEffect(() => {
-       getParent()
+        getParent()
+        getCustomField()
     }, [])
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        const result = Object.entries(customFieldData).map(([id, value]) => ({
+            id: parseInt(id), 
+            value,
+        }));
         const formData = {
             title: title,
             description: description,
-              ...(parentId && parent && { parent_id: parentId }) 
+            ...(parentId && parent && { parent_id: parentId }),
+            custom_field: result
         }
         sendProgram(formData)
     };
@@ -131,7 +143,7 @@ const DepartmentAdd = () => {
                     <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={formData}       
+                    initialData={customFieldData}      
           /> 
             {/* Save Button */}
             <div className="flex">

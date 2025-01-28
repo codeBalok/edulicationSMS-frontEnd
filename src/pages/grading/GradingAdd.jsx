@@ -24,18 +24,18 @@ const GradingAdd = () => {
   const [description, setDescription] = useState("");
 
    const [customFields, setCustomFields] = useState();
-    const [formData, setFormData] = useState({});
-
- const getCustomField = async () => {
-        const response = await api.fetchCustomField("AcademicCalendar")
-        setCustomFields(response?.data)
-        console.log("this is respnse of custom fields::::", response?.data)
-    }
+   const [customFieldData, setCustomFieldData] = useState({});
+   
+                    const getCustomField = async () => {
+                      const response = await api.fetchCustomField("Grading")
+                      setCustomFields(response?.data)
+                      console.log("this is respnse of custom fields::::", response?.data)
+                    }
 
 
 
   useEffect(() => {
-console.log("grading ::", parent)
+    console.log("grading ::", parent)
   },[parent])
   
     const getParent = async () => {
@@ -43,7 +43,10 @@ console.log("grading ::", parent)
         setParent(response?.data.data)
         console.log("data from sem:",response)
     }
-
+    const handleFieldChange = (updatedData) => {
+            setCustomFieldData(updatedData); 
+        };
+    
     const sentGrading = async (data) => {
         const response = await api.createGrading(data);
         if (response.status !== 201) {
@@ -56,24 +59,29 @@ console.log("grading ::", parent)
     }, [])
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+      e.preventDefault();
       
+      const result = Object.entries(customFieldData).map(([id, value]) => ({
+     id: parseInt(id), 
+            value,
+        }));
       const formData = {
         title,
        grade_points: gradePoints,
-      min_marks: minMarks,
+       min_marks: minMarks,
       max_marks: maxMarks,
       grade_letter: gradeLetter,
       grade_value: gradeValue,
       grade_range: gradeRange,
         grade_description: description,
         ...(parentId && parent && { parent_id: parentId }),
+        custom_field: result
       }
       console.log("Grading::", formData)
       sentGrading(formData)
-
+      
     };
-
+    
     return (
         <div className="flex h-screen">
            <Sidebar
@@ -212,11 +220,12 @@ console.log("grading ::", parent)
     />
   </div>
 
-     <CustomFieldRender
+   <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={formData}       
-          />        
+                    initialData={customFieldData}       
+                    /> 
+            
   {/* Submit Button */}
   <div className="flex">
     <button

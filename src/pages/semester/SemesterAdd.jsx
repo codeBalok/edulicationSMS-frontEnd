@@ -16,15 +16,18 @@ const SemesterAdd = () => {
   const [year, setYear] = useState("");
   const [parentId, setParentId] = useState("");
   const [customFields, setCustomFields] = useState();
-    const [formData, setFormData] = useState({});
-
+   const [customFieldData, setCustomFieldData] = useState({});
+   
+  
  const getCustomField = async () => {
-        const response = await api.fetchCustomField("AcademicCalendar")
+   const response = await api.fetchCustomField("Semester")
         setCustomFields(response?.data)
         console.log("this is respnse of custom fields::::", response?.data)
     }
 
-
+        const handleFieldChange = (updatedData) => {
+                setCustomFieldData(updatedData); 
+            };
   
     const getParent = async () => {
         const response = await api.fetchSemesterParent();
@@ -45,15 +48,20 @@ const SemesterAdd = () => {
     }, [])
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+      e.preventDefault();
+       const result = Object.entries(customFieldData).map(([id, value]) => ({
+     id: parseInt(id), 
+     value,
+    }));
       
       const formData = {
             title,
             year,
           ...(parentId && parent && { parent_id: parentId }),
+          custom_field: result
         }
-      sendSemester(formData)
-      
+        sendSemester(formData)
+        
       // console.log("session data::", formData)
     };
 
@@ -119,10 +127,10 @@ const SemesterAdd = () => {
     />
   </div>
             
-            <CustomFieldRender
+           <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={formData}       
+                    initialData={customFieldData}       
           /> 
 
   {/* Submit Button */}

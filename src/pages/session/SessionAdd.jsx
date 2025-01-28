@@ -26,15 +26,19 @@ const SessionAdd = () => {
   const [dftEndHour, setDftEndHour] = useState("");
   const [dftEndMin, setDftEndMin] = useState("");
   const [dftEndAmPm, setDftEndAmPm] = useState("AM");
-   const [customFields, setCustomFields] = useState();
-    const [formData, setFormData] = useState({});
+  const [customFields, setCustomFields] = useState();
+  const [customFieldData, setCustomFieldData] = useState({});
+   
 
  const getCustomField = async () => {
-        const response = await api.fetchCustomField("AcademicCalendar")
+        const response = await api.fetchCustomField("Session")
         setCustomFields(response?.data)
         console.log("this is respnse of custom fields::::", response?.data)
     }
-  
+    
+    const handleFieldChange = (updatedData) => {
+            setCustomFieldData(updatedData); 
+        };
     const getParent = async () => {
         const response = await api.fetchSessionParent();
         setParent(response?.data.data)
@@ -54,9 +58,14 @@ const SessionAdd = () => {
     }, [])
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+      e.preventDefault();
       
-        const formData = {
+      const result = Object.entries(customFieldData).map(([id, value]) => ({
+     id: parseInt(id), 
+            value,
+          }));
+      
+  const formData = {
       title,
       event_id: eventId,
       location,
@@ -70,7 +79,8 @@ const SessionAdd = () => {
       dftendmin: dftEndMin,
       dftendampm: dftEndAmPm,
       ...(parentId && parent && { parent_id: parentId }),
-        }
+      custom_field: result
+    }
       sendSession(formData)
       
       // console.log("session data::", formData)
@@ -224,11 +234,11 @@ const SessionAdd = () => {
     </select>
   </div>
 
-  <CustomFieldRender
+ <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={formData}       
-            /> 
+                    initialData={customFieldData}       
+                    /> 
             
   {/* Submit Button */}
   <div className="flex">

@@ -198,7 +198,6 @@ const AcademicSetting = () => {
 };
 
 
-
     const handleSaveHierarchy = async () => {
         try {
             const hierarchyData = selectedItems.map(item => item.name);

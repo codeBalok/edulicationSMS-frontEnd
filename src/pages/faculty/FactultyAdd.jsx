@@ -17,7 +17,7 @@ const FacultyAdd = () => {
     const [shortcode, setShortcode] = useState('');
 
     const [customFields, setCustomFields] = useState();
-    const [formData, setFormData] = useState({});
+    const [customFieldData, setCustomFieldsData] = useState({});
 
     useEffect(() => {
         getParent()
@@ -52,7 +52,7 @@ const FacultyAdd = () => {
     // ];
 
     const handleFieldChange = (updatedData) => {
-        setFormData(updatedData); 
+        setCustomFieldsData(updatedData); 
     };
 
     const getParent = async () => {
@@ -79,16 +79,21 @@ const FacultyAdd = () => {
   
 
     const handleSubmit = (e) => {
-
         e.preventDefault();
-        console.log("Form Data Submitted: ", formData);
-        // e.preventDefault();
-        // const formData = {
-        //     title: title,
-        //     shortcode: shortcode,
-        //     ...(parentId && parent && { parent_id: parentId }) 
-        // }
-        // sendFaculty(formData)
+    
+        const result = Object.entries(customFieldData).map(([id, value]) => ({
+            id: parseInt(id), 
+            value,
+        }));
+
+        const formData = {
+            title: title,
+            shortcode: shortcode,
+            ...(parentId && parent && { parent_id: parentId }),
+            custom_field: result
+        }
+        // console.log("thisiss::",formData)
+        sendFaculty(formData)
     };
 
     return (
@@ -168,7 +173,7 @@ const FacultyAdd = () => {
              <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={formData}       
+                    initialData={customFieldData}       
                 />        
 
             {/* Save Button */}

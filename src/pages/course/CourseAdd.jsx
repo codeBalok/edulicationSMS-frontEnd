@@ -17,6 +17,7 @@ const CourseAdd = () => {
     
     const [code, setCode] = useState("");
   const [name, setName] = useState("");
+  const [title, setTitle] = useState("");
   const [instituteId, setInstituteId] = useState("");
   const [courseCategoryId, setCourseCategoryId] = useState("");
   const [defaultCourseCost, setDefaultCourseCost] = useState("");
@@ -35,13 +36,18 @@ const CourseAdd = () => {
   const [privateSessions, setPrivateSessions] = useState("");
 
   const [customFields, setCustomFields] = useState();
-    const [formData, setFormData] = useState({});
+  const [customFieldData, setCustomFieldData] = useState({});
+
 
  const getCustomField = async () => {
-        const response = await api.fetchCustomField("AcademicCalendar")
+        const response = await api.fetchCustomField("Course")
         setCustomFields(response?.data)
         console.log("this is respnse of custom fields::::", response?.data)
-    }
+  }
+  
+  const handleFieldChange = (updatedData) => {
+        setCustomFieldData(updatedData); 
+    };
 
     const getParent = async () => {
         const response = await api.fetchCourseParent();
@@ -62,8 +68,14 @@ const CourseAdd = () => {
     }, [])
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        const formData = {
+      e.preventDefault();
+      
+      const result = Object.entries(customFieldData).map(([id, value]) => ({
+            id: parseInt(id), 
+            value,
+        }));
+      const formData = {
+          title,
            code,
       name,
       ...(parentId && parent && { parent_id: parentId }),
@@ -81,7 +93,8 @@ const CourseAdd = () => {
       status,
       self_paced_sessions: selfPacedSessions,
       public_sessions: publicSessions,
-      private_sessions: privateSessions,
+          private_sessions: privateSessions,
+      custom_field: result
         }
     sendCourse(formData)
     };
@@ -121,6 +134,17 @@ const CourseAdd = () => {
       )}
 
       {/* Input fields for all states */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700">
+          Title <span className="text-red-500">*</span>
+        </label>
+        <input
+          type="text"
+          className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+      </div>
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
           Code <span className="text-red-500">*</span>
@@ -327,7 +351,7 @@ const CourseAdd = () => {
       <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={formData}       
+                    initialData={customFieldData}       
           /> 
       <div className="flex">
         <button

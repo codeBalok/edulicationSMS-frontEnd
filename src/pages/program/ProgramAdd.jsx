@@ -17,13 +17,17 @@ const ProgramAdd = () => {
     const [shortcode, setShortcode] = useState('');
 
     const [customFields, setCustomFields] = useState();
-    const [formData, setFormData] = useState({});
+    const [customFieldData, setCustomFieldsData] = useState({});
 
  const getCustomField = async () => {
-        const response = await api.fetchCustomField("AcademicCalendar")
+        const response = await api.fetchCustomField("Program")
         setCustomFields(response?.data)
         console.log("this is respnse of custom fields::::", response?.data)
     }
+
+    const handleFieldChange = (updatedData) => {
+        setCustomFieldsData(updatedData); 
+    };
 
 
     const getParent = async () => {
@@ -46,10 +50,16 @@ const ProgramAdd = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+         const result = Object.entries(customFieldData).map(([id, value]) => ({
+            id: parseInt(id), 
+            value,
+        }));
         const formData = {
             title: title,
             shortcode: shortcode,
-             ...(parentId && parent && { parent_id: parentId }) 
+            ...(parentId && parent && { parent_id: parentId }),
+             custom_field: result
         }
         sendProgram(formData)
     };
@@ -123,7 +133,7 @@ const ProgramAdd = () => {
                     <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={formData}       
+                    initialData={customFieldData}       
           /> 
             {/* Save Button */}
             <div className="flex">

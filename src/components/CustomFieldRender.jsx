@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-const CustomFieldRender = ({ customFields = [], initialData = {}, onFieldChange }) => {
+const CustomFieldRender = ({ customFields = [], initialData = {}, onFieldChange, tableName, tableValue }) => {
     const [formData, setFormData] = useState(() => {
         const initialValues = customFields.reduce((acc, field) => {
-            acc[field.name] = initialData[field.name] || (field.defaultValue || "");
+            acc[field.id] = initialData[field.id] || (field.defaultValue || "");
             return acc;
         }, {});
         return initialValues;
@@ -17,10 +17,10 @@ const CustomFieldRender = ({ customFields = [], initialData = {}, onFieldChange 
     }, [initialData]);
 
     const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
+        const { name, value, type, checked, id } = e.target;
         const newValue = type === "checkbox" ? checked : value;
         setFormData(prev => {
-            const updatedData = { ...prev, [name]: newValue };
+            const updatedData = { ...prev, [id]: newValue };
             if (onFieldChange) {
                 onFieldChange(updatedData);
             }
@@ -41,11 +41,11 @@ const CustomFieldRender = ({ customFields = [], initialData = {}, onFieldChange 
                             {name} {isRequired && <span className="text-red-500">*</span>}
                         </label>
                         <input
-                            id={name}
+                            id={id}
                             name={name}
                             type={type}
                             className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                            value={formData[name] || ""}
+                            value={formData[id] || ""}
                             onChange={handleChange}
                             required={isRequired}
                         />
@@ -58,10 +58,10 @@ const CustomFieldRender = ({ customFields = [], initialData = {}, onFieldChange 
                             {name} {isRequired && <span className="text-red-500">*</span>}
                         </label>
                         <select
-                            id={name}
+                            id={id}
                             name={name}
                             className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                            value={formData[name] || ""}
+                            value={formData[id] || ""}
                             onChange={handleChange}
                             required={isRequired}
                         >
@@ -83,11 +83,11 @@ const CustomFieldRender = ({ customFields = [], initialData = {}, onFieldChange 
                         {parsedOptions.map((option, idx) => (
                             <div key={idx} className="flex items-center">
                                 <input
-                                    id={`${name}-${option}`}
+                                    id={`${id}-${option}`}
                                     type="radio"
                                     name={name}
                                     value={option}
-                                    checked={formData[name] === option}
+                                    checked={formData[id] === option}
                                     onChange={handleChange}
                                     required={isRequired}
                                 />
@@ -105,10 +105,10 @@ const CustomFieldRender = ({ customFields = [], initialData = {}, onFieldChange 
                             {name} {isRequired && <span className="text-red-500">*</span>}
                         </label>
                         <input
-                            id={name}
+                            id={id}
                             type="checkbox"
                             name={name}
-                            checked={formData[name] || false}
+                            checked={formData[id] || false}
                             onChange={handleChange}
                             className="mt-1 block w-4 h-4"
                             required={isRequired}
@@ -122,6 +122,12 @@ const CustomFieldRender = ({ customFields = [], initialData = {}, onFieldChange 
 
     return (
         <div>
+            {tableName && (
+                <div className="mb-6">
+                    <h2 className="text-xl font-bold">{tableName}</h2>
+                    {tableValue && <p className="text-sm text-gray-600">{tableValue}</p>}
+                </div>
+            )}
             {customFields && customFields.length > 0 ? (
                 customFields.map(field => renderField(field))
             ) : (

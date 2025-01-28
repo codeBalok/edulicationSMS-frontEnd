@@ -21,14 +21,17 @@ const LearningOutcomeAdd = () => {
   const [description, setDescription] = useState("");
 
   const [customFields, setCustomFields] = useState();
-    const [formData, setFormData] = useState({});
+   const [customFieldData, setCustomFieldData] = useState({});
 
  const getCustomField = async () => {
-        const response = await api.fetchCustomField("AcademicCalendar")
-        setCustomFields(response?.data)
-        console.log("this is respnse of custom fields::::", response?.data)
-    }
-
+   const response = await api.fetchCustomField("LearningOutcome")
+   setCustomFields(response?.data)
+   console.log("this is respnse of custom fields::::", response?.data)
+  }
+  
+  const handleFieldChange = (updatedData) => {
+          setCustomFieldData(updatedData); 
+      };
   
     const getParent = async () => {
         const response = await api.fetchLearningOutcomeParent();
@@ -49,16 +52,22 @@ const LearningOutcomeAdd = () => {
     }, [])
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+      e.preventDefault();
       
-      const formData = {
-        title,
+       const result = Object.entries(customFieldData).map(([id, value]) => ({
+            id: parseInt(id), 
+            value,
+        }));
+      
+    const formData = {
+      title,
        level,
       assessment_methods: assessmentMethods,
       performance_criteria: performanceCriteria,
       mapping,
         description,
         ...(parentId && parent && { parent_id: parentId }),
+        custom_field: result
       }
       console.log("Outcomesss::", formData)
       sendLearningOutcomes(formData)
@@ -195,11 +204,11 @@ const LearningOutcomeAdd = () => {
     />
   </div>
          
-  <CustomFieldRender
+ <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={formData}       
-          /> 
+                    initialData={customFieldData}       
+                    /> 
 
   {/* Submit Button */}
   <div className="flex">

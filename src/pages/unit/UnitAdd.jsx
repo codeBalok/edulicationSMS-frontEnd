@@ -20,13 +20,18 @@ const UnitAdd = () => {
    const [description, setDescription] = useState("");
   
   const [customFields, setCustomFields] = useState();
-    const [formData, setFormData] = useState({});
+  const [customFieldData, setCustomFieldData] = useState({});
 
- const getCustomField = async () => {
-        const response = await api.fetchCustomField("unit")
-        setCustomFields(response?.data)
-        console.log("this is respnse of custom fields::::", response?.data)
-    }
+                    
+                    const getCustomField = async () => {
+                      const response = await api.fetchCustomField("unit")
+                      setCustomFields(response?.data)
+                      console.log("this is respnse of custom fields::::", response?.data)
+                  }
+  
+                    const handleFieldChange = (updatedData) => {
+                            setCustomFieldData(updatedData); 
+                        };
 
     const getParent = async () => {
         const response = await api.fetchUnitParent();
@@ -47,7 +52,12 @@ const UnitAdd = () => {
     }, [])
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+      e.preventDefault();
+      
+    const result = Object.entries(customFieldData).map(([id, value]) => ({
+    id: parseInt(id), 
+            value,
+          }));
       
      const formData = {
         title,
@@ -57,10 +67,11 @@ const UnitAdd = () => {
         assessments,
         description,
         ...(parentId && parent && { parent_id: parentId }),
+        custom_field: result
       }
       console.log("subj::", formData)
       sendUnit(formData)
-
+      
     };
 
     return (
@@ -172,12 +183,11 @@ const UnitAdd = () => {
       onChange={(e) => setDescription(e.target.value)}
     />
             </div>
-            <CustomFieldRender
+           <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={formData}       
-          /> 
-         
+                    initialData={customFieldData}       
+            /> 
   {/* Submit Button */}
   <div className="flex">
     <button
