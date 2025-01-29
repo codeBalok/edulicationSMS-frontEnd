@@ -12,4 +12,9 @@ export const toKebabCase = (str) => {
     : null;
 }
 
+export const captalize = (str) => {
+  return str ? str.charAt(0).toUpperCase() + str.slice(1) : null;
+
+} 
+
 

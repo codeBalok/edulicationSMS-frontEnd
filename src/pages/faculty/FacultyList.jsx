@@ -1,5 +1,5 @@
 import React, {useEffect, useContext, useState} from 'react'
-import Sidebar from '../../components/Sidebar'
+import Sidebar from '../../components/SideBar'
 import HierarchyContext from '../../contexts/HierarchyContext'
 import api from '../../api'
 import { Link } from 'react-router-dom'
@@ -7,6 +7,7 @@ import { parentExtractor } from '../../utils/stringUtils'
 import Nav from '../../components/Nav'
 import { BiSolidEdit } from "react-icons/bi";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { captalize } from '../../utils/stringUtils'
 
 
 const FacultyList = () => {
@@ -15,16 +16,18 @@ const FacultyList = () => {
 
     const [program, setProgram] = useState();
     const [parent, setParent] = useState();
+    const [customField, setCustomField] = useState()
 
     const getProgram = async () => {
         const data = await api.fetchFacultiesLists();
         const model = parentExtractor(data.data[0]?.parent_type)
-        setProgram(data.data)
+        setProgram(data.data?.factulty)
+        setCustomField(data.data?.custom_field)
         setParent(model)
     }
     useEffect(() => {
         getProgram()
-    
+ 
     }, [])
 
    
@@ -45,6 +48,12 @@ const FacultyList = () => {
                         <th className="px-4 py-2 text-left text-sm font-medium text-white">Faculty</th>
                         <th className="px-4 py-2 text-left text-sm font-medium text-white">{ parent }</th>
                         <th className="px-4 py-2 text-left text-sm font-medium text-white">Status</th>
+                        {
+                            customField !== null &&  
+                                customField?.map((data) => (
+                                    <th className="px-4 py-2 text-left text-sm font-medium text-white">{ captalize(data.name) + data.id}</th>
+                               ))        
+                        }        
                         <th className="px-4 py-2 text-left text-sm font-medium text-white">Actions</th>
                         
                     </tr>
@@ -63,9 +72,22 @@ const FacultyList = () => {
                                             : "bg-red-100 text-red-700"
                                     }`}
                                 >
-                                    {data.status ? "Active": "Not Active"}
+                                    {data.status ? "Active" : "Not Active"}
+                                    
                                 </span>
                             </td>
+                            {customField.map((customFieldData) => {
+                const customFieldValue = data.custom_field_values.find(
+                    (cfv) => cfv.custom_field_id === customFieldData.id
+                );
+
+                return (
+                    <td key={customField.id} className="px-4 py-2 text-sm text-gray-500">
+                        {customFieldValue ? customFieldValue.value : 'N/A'}
+                    </td>
+                );
+            })}
+
                             <td className="px-4 py-2 text-sm">
                                 <button
                                     className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
