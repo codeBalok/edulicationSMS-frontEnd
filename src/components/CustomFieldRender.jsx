@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const CustomFieldRender = ({ customFields = [], initialData = {}, onFieldChange, tableName, tableValue }) => {
+const CustomFieldRender = ({ customFields = [], initialData = {}, onFieldChange, tableName, tableValue,  errors = {} }) => {
     const [formData, setFormData] = useState(() => {
         const initialValues = customFields.reduce((acc, field) => {
             acc[field.id] = initialData[field.id] || (field.defaultValue || "");
@@ -17,10 +17,10 @@ const CustomFieldRender = ({ customFields = [], initialData = {}, onFieldChange,
     }, [initialData]);
 
     const handleChange = (e) => {
-        const { name, value, type, checked, id } = e.target;
+        const { name, value, type, checked, id, isRequired } = e.target;
         const newValue = type === "checkbox" ? checked : value;
         setFormData(prev => {
-            const updatedData = { ...prev, [id]: newValue };
+            const updatedData = { ...prev, [id]: newValue};
             if (onFieldChange) {
                 onFieldChange(updatedData);
             }
@@ -31,7 +31,12 @@ const CustomFieldRender = ({ customFields = [], initialData = {}, onFieldChange,
     const renderField = (field) => {
         const { id, name, type, options, isRequired } = field;
         const parsedOptions = options ? options : [];
+         const fieldError = errors[id];  // Get error for this field
 
+    const inputClasses = `mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
+      fieldError ? 'border-red-500' : ''
+            }`;
+        
         switch (type) {
             case 'text':
             case 'number':
@@ -49,6 +54,9 @@ const CustomFieldRender = ({ customFields = [], initialData = {}, onFieldChange,
                             onChange={handleChange}
                             required={isRequired}
                         />
+                         {fieldError && (
+              <p className="mt-1 text-sm text-red-500">{fieldError}</p>
+            )}
                     </div>
                 );
             case 'textarea':
@@ -148,7 +156,7 @@ const CustomFieldRender = ({ customFields = [], initialData = {}, onFieldChange,
             {customFields && customFields.length > 0 ? (
                 customFields.map(field => renderField(field))
             ) : (
-                <p>No custom fields available</p>
+               ''
             )}
         </div>
     );

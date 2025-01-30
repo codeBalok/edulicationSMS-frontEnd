@@ -1,4 +1,6 @@
 import axios from 'axios';
+// import { showToast } from '../utils/toastUtils';
+import { showToast } from '../utils/toastUtils';
 
 const http = axios.create({
   'baseURL': 'http://127.0.0.1:8000/api',
@@ -7,6 +9,34 @@ const http = axios.create({
       'Content-Type': 'application/json',
    },
 });
+
+http.interceptors.response.use(
+  response => response,
+  error => {
+    const defaultMessage = 'An unexpected error occurred. Please try again.';
+    let errorMessage = defaultMessage;
+
+    if (error.response) {
+      const { data, status } = error.response;
+      
+      errorMessage = data?.message ||
+        data?.error?.message ||
+        data?.errors?.[0]?.message ||
+        data?.detail ||
+        data?.title ||
+        defaultMessage;
+      if (status >= 500) {
+        errorMessage = 'Server error. Please try again later.';
+      }
+    } else if (error.request) {
+      // The request was made but no response received
+      errorMessage = 'Network error. Please check your internet connection.';
+    }
+
+    showToast('error', 'Error', errorMessage);
+    return Promise.reject(error);
+  }
+);
 
 const api = {
     //Hierarchy 

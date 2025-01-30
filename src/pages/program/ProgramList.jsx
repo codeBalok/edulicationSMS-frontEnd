@@ -3,10 +3,11 @@ import Sidebar from '../../components/Sidebar'
 import HierarchyContext from '../../contexts/HierarchyContext'
 import api from '../../api'
 import { Link } from 'react-router-dom'
-import { parentExtractor } from '../../utils/stringUtils'
+import { captalize, parentExtractor } from '../../utils/stringUtils'
 import Nav from '../../components/Nav'
 import { BiSolidEdit } from 'react-icons/bi'
 import { RiDeleteBin6Line } from 'react-icons/ri'
+
 
 const ProgramList = () => {
 
@@ -14,11 +15,14 @@ const ProgramList = () => {
 
     const [program, setProgram] = useState();
     const [parent, setParent] = useState();
+    const [customField, setCustomField] = useState()
 
     const getProgram = async () => {
         const data = await api.fetchProgramLists();
         const model = parentExtractor(data.data[0]?.parent_type)
-        setProgram(data.data)
+        setProgram(data.data?.program)
+        setCustomField(data.data?.custom_field)
+
         setParent(model)
     }
     useEffect(() => {
@@ -43,6 +47,12 @@ const ProgramList = () => {
                         <th className="px-4 py-2 text-left text-sm font-medium text-white">Shortcode</th>
                         <th className="px-4 py-2 text-left text-sm font-medium text-white">{ parent }</th>
                         <th className="px-4 py-2 text-left text-sm font-medium text-white">Status</th>
+                        {
+                            customField !== null &&  
+                                customField?.map((data) => (
+                                    <th className="px-4 py-2 text-left text-sm font-medium text-white">{ captalize(data.name) }</th>
+                               ))        
+                        }            
                         <th className="px-4 py-2 text-left text-sm font-medium text-white">Actions</th>
                         
                     </tr>
@@ -65,6 +75,18 @@ const ProgramList = () => {
                                     {data.status ? "Active": "Not Active"}
                                 </span>
                             </td>
+                             {
+                                customField.map((customFieldData) => {
+                                const customFieldValue = data.custom_field_values?.find(
+                                    (cfv) => cfv.custom_field_id === customFieldData.id
+                                );
+
+                                return (
+                                    <td key={customField.id} className="px-4 py-2 text-sm text-gray-500">
+                                        {customFieldValue ? customFieldValue.value : 'N/A'}
+                                    </td>
+                                );
+                           })}
                             <td className="px-4 py-2 text-sm">
                                 <button
                                     className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600"

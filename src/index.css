@@ -71,6 +71,13 @@
 }
 
 
+/* Info Toast */
+.toast-icon .info { color: #17a2b8; }
+.custom-toast.info {
+  border-color: #17a2b8;
+  background-color: #e3fafc;
+}
+
 ::-webkit-scrollbar {
   width: 6px;
 } 

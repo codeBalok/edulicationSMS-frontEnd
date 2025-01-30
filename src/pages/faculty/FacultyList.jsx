@@ -1,5 +1,5 @@
 import React, {useEffect, useContext, useState} from 'react'
-import Sidebar from '../../components/SideBar'
+import Sidebar from '../../components/Sidebar'
 import HierarchyContext from '../../contexts/HierarchyContext'
 import api from '../../api'
 import { Link } from 'react-router-dom'
@@ -51,7 +51,7 @@ const FacultyList = () => {
                         {
                             customField !== null &&  
                                 customField?.map((data) => (
-                                    <th className="px-4 py-2 text-left text-sm font-medium text-white">{ captalize(data.name) + data.id}</th>
+                                    <th className="px-4 py-2 text-left text-sm font-medium text-white">{ captalize(data.name)}</th>
                                ))        
                         }        
                         <th className="px-4 py-2 text-left text-sm font-medium text-white">Actions</th>
@@ -76,17 +76,18 @@ const FacultyList = () => {
                                     
                                 </span>
                             </td>
-                            {customField.map((customFieldData) => {
-                const customFieldValue = data.custom_field_values.find(
-                    (cfv) => cfv.custom_field_id === customFieldData.id
-                );
+                            {
+                                customField.map((customFieldData) => {
+                                const customFieldValue = data.custom_field_values.find(
+                                    (cfv) => cfv.custom_field_id === customFieldData.id
+                                );
 
-                return (
-                    <td key={customField.id} className="px-4 py-2 text-sm text-gray-500">
-                        {customFieldValue ? customFieldValue.value : 'N/A'}
-                    </td>
-                );
-            })}
+                                return (
+                                    <td key={customField.id} className="px-4 py-2 text-sm text-gray-500">
+                                        {customFieldValue ? customFieldValue.value : 'N/A'}
+                                    </td>
+                                );
+                           })}
 
                             <td className="px-4 py-2 text-sm">
                                 <button

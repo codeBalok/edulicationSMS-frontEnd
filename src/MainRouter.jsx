@@ -54,8 +54,9 @@ import AcademicCalendarAddList from "./pages/academicCalendar/AcademicCalendarLi
 import EventAdd from "./pages/event/EventAdd";
 import EventList from "./pages/event/EventList";
 import Setting from "./pages/Setting";
-// import AddCustomFieldForm from "./components/AddCustomFieldForm";
 import AddCustomField from "./pages/AddCustomField";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const MainRouter = () => {
 
@@ -75,9 +76,6 @@ export const MainRouter = () => {
             console.error('Error fetching data:', error);
         }
     };
-    
-  
-    
     
 const router = createBrowserRouter([
   {
@@ -259,7 +257,19 @@ const router = createBrowserRouter([
                     }
                 }
             >
-            <RouterProvider router={router} />
+          <RouterProvider router={router} />
+           <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+          
           </HierarchyContext.Provider>
         </DndProvider>
   )

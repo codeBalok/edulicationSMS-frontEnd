@@ -1,10 +1,11 @@
 import React, {useEffect, useContext, useState} from 'react'
-import Sidebar from '../../components/SideBar'
+import Sidebar from '../../components/Sidebar'
 import HierarchyContext from '../../contexts/HierarchyContext'
 import api from '../../api'
 import { Link } from 'react-router-dom'
 import Nav from '../../components/Nav'
 import CustomFieldRender from '../../components/CustomFieldRender'
+import { showToast } from '../../utils/toastUtils'
 
 
 const DepartmentAdd = () => {
@@ -18,6 +19,9 @@ const DepartmentAdd = () => {
 
     const [customFields, setCustomFields] = useState();
     const [customFieldData, setCustomFieldData] = useState({});
+
+    const [errors, setErrors] = useState({});
+
 
  const getCustomField = async () => {
         const response = await api.fetchCustomField("Department")
@@ -37,9 +41,11 @@ const DepartmentAdd = () => {
 
 
     const sendProgram = async (data) => {
-        const response = await api.createDepartment(data);
-        if (response.status !== 201) {
-            alert("failed to add program")
+        try {
+            const response = await api.createDepartment(data);
+             showToast('success', 'Created', 'Departement created successfully!');
+        } catch (error) {
+            
         }
     }
 
@@ -48,8 +54,39 @@ const DepartmentAdd = () => {
         getCustomField()
     }, [])
 
+
+    const validateForm = () => {
+    const newErrors = {};
+    
+    if (parent !== null && !parentId) {
+        newErrors.parentId = `${parent[0]?.model} is required`;
+    }
+    
+    if (!title.trim()) {
+        newErrors.title = 'Title is required';
+    }
+    
+    if (!description.trim()) {
+        newErrors.description = 'Description is required';
+    }
+
+    // Custom field validations
+    customFields.forEach(field => {
+        const value = customFieldData[field.id] || '';
+        if (field.is_required && !value.trim()) {
+            newErrors[field.id] = `${field.name} is required`;
+        }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!validateForm()) {
+            return;
+        }
 
         const result = Object.entries(customFieldData).map(([id, value]) => ({
             id: parseInt(id), 
@@ -75,7 +112,7 @@ const DepartmentAdd = () => {
             className="bg-white mt-16 p-6 d w-[60%]"
             onSubmit={handleSubmit}
         >
-                    {/* Faculty Dropdown */}
+                 
             {
                 parent !== null && (   
                  <div className="mb-4">
@@ -97,6 +134,9 @@ const DepartmentAdd = () => {
                        ))            
                     }        
                 </select>
+                {errors.parentId && (
+                <p className="mt-1 text-sm text-red-500">{errors.parentId}</p>
+            )}                
             </div>)       
             }
             
@@ -114,9 +154,12 @@ const DepartmentAdd = () => {
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                 />
+                {errors.title && (
+                    <p className="mt-1 text-sm text-red-500">{errors.title}</p>
+                )}        
             </div>
 
-            {/* Shortcode Input */}
+            {/* Description Input */}
             <div className="mb-4">
                 <label htmlFor="shortcode" className="block text-sm font-medium text-gray-700">
                     Description <span className="text-red-500">*</span>
@@ -138,13 +181,17 @@ const DepartmentAdd = () => {
                     value={description}
                     onChange={(e) => setShortcode(e.target.value)}
                 /> */}
+                         {errors.description && (
+        <p className="mt-1 text-sm text-red-500">{errors.description}</p>
+    )}
             </div>
 
                     <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
                     initialData={customFieldData}      
-          /> 
+                    errors={errors}    
+                  /> 
             {/* Save Button */}
             <div className="flex">
                 <button

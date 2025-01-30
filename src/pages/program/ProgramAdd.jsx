@@ -1,10 +1,11 @@
 import React, {useEffect, useContext, useState} from 'react'
-import Sidebar from '../../components/SideBar'
+import Sidebar from '../../components/Sidebar'
 import HierarchyContext from '../../contexts/HierarchyContext'
 import api from '../../api'
 import { Link } from 'react-router-dom'
 import Nav from '../../components/Nav'
 import CustomFieldRender from '../../components/CustomFieldRender'
+import { showToast } from '../../utils/toastUtils'
   
 
 const ProgramAdd = () => {
@@ -18,8 +19,9 @@ const ProgramAdd = () => {
 
     const [customFields, setCustomFields] = useState();
     const [customFieldData, setCustomFieldsData] = useState({});
+    const [errors, setErrors] = useState({});
 
- const getCustomField = async () => {
+    const getCustomField = async () => {
         const response = await api.fetchCustomField("Program")
         setCustomFields(response?.data)
         console.log("this is respnse of custom fields::::", response?.data)
@@ -36,10 +38,39 @@ const ProgramAdd = () => {
         console.log(data)
     }
 
+   const validateForm = () => {
+    const newErrors = {};
+    
+    if (parent !== null && !parentId) {
+        newErrors.parentId = `${parent[0]?.model} is required`;
+    }
+    
+    if (!title.trim()) {
+        newErrors.title = 'Title is required';
+    }
+    
+    if (!shortcode.trim()) {
+        newErrors.shortcode = 'Shortcode is required';
+    }
+
+    // Custom field validations
+    customFields.forEach(field => {
+        const value = customFieldData[field.id] || '';
+        if (field.is_required && !value.trim()) {
+            newErrors[field.id] = `${field.name} is required`;
+        }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+   };
+
     const sendProgram = async (data) => {
-        const response = await api.createProgram(data);
-        if (response.status !== 201) {
-            alert("failed to add program")
+        try {
+            const response = await api.createProgram(data);
+            showToast('success', 'Created', 'Program created successfully!');
+        } catch (error) {
+            
         }
     }
 
@@ -50,10 +81,13 @@ const ProgramAdd = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-         const result = Object.entries(customFieldData).map(([id, value]) => ({
+        if (!validateForm()) {
+            return;
+        }
+        const result = Object.entries(customFieldData).map(([id, value,]) => ({
             id: parseInt(id), 
             value,
+          
         }));
         const formData = {
             title: title,
@@ -97,6 +131,9 @@ const ProgramAdd = () => {
                        ))            
                     }        
                 </select>
+                 {errors.parentId && (
+                <p className="mt-1 text-sm text-red-500">{errors.parentId}</p>
+            )}                   
             </div>)       
             }
 
@@ -113,6 +150,9 @@ const ProgramAdd = () => {
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                 />
+                {errors.title && (
+                    <p className="mt-1 text-sm text-red-500">{errors.title}</p>
+                )}                   
             </div>
 
             {/* Shortcode Input */}
@@ -128,13 +168,17 @@ const ProgramAdd = () => {
                     value={shortcode}
                     onChange={(e) => setShortcode(e.target.value)}
                 />
+                {errors.shortcode && (
+                    <p className="mt-1 text-sm text-red-500">{errors.shortcode}</p>
+                )}          
             </div>
 
-                    <CustomFieldRender
+                <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={customFieldData}       
-          /> 
+                    initialData={customFieldData}  
+                    errors={errors}        
+               /> 
             {/* Save Button */}
             <div className="flex">
                 <button

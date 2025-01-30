@@ -4,9 +4,8 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import Item from './components/Item';
 import api from './api';
-// import CustomFieldForm from './components/CustomFieldForm';
 import CustomFieldList from './components/CustomFieldList'
-import Sidebar from './components/SideBar';
+import Sidebar from './components/Sidebar';
 import CustomFieldForm from './components/CustomFieldForm';
 
 const App = () => {
@@ -92,75 +91,75 @@ const App = () => {
         }
     };
 
-    const fetchDefaultFields = async (academicItemId) => {
-        try {
-            let response;
-            switch (academicItemId) {
-                case 'program':
-                    response = await api.fetchPrograms(instituteId);
-                    return response.data.map(item => ({ id: item.id, name: 'title', type: 'text', label: 'Title', value: item.title }));
-                case 'course':
-                    response = await api.fetchCourses(instituteId);
-                    return response.data.map(item => ({ id: item.id, name: 'title', type: 'text', label: 'Title', value: item.title }));
-                case 'assessment':
-                    response = await api.fetchAssessments(instituteId);
-                    return response.data.map(item => ({ id: item.id, name: 'title', type: 'text', label: 'Title', value: item.title }));
-                case 'batch':
-                    response = await api.fetchBatches(instituteId);
-                    return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
-                case 'semester':
-                    response = await api.fetchSemesters(instituteId);
-                    return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
-                case 'unit':
-                    response = await api.fetchUnits(instituteId);
-                    return response.data.map(item => ({ id: item.id, name: 'title', type: 'text', label: 'Title', value: item.title }));
-                case 'module':
-                    response = await api.fetchModules(instituteId);
-                    return response.data.map(item => ({ id: item.id, name: 'title', type: 'text', label: 'Title', value: item.title }));
-                case 'grading':
-                    response = await api.fetchGradings(instituteId);
-                    return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
-                case 'department':
-                    response = await api.fetchDepartments(instituteId);
-                    return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
-                case 'faculty':
-                    response = await api.fetchFaculties(instituteId);
-                    return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
-                case 'session':
-                    response = await api.fetchSessions(instituteId);
-                    return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
-                case 'section':
-                    response = await api.fetchSections(instituteId);
-                    return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
-                case 'class_year':
-                    response = await api.fetchClassYears(instituteId);
-                    return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
-                case 'classroom':
-                    response = await api.fetchClassrooms(instituteId);
-                    return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
-                case 'subject':
-                    response = await api.fetchSubjects(instituteId);
-                    return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
-                case 'curriculum':
-                    response = await api.fetchCurriculums(instituteId);
-                    return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
-                case 'learning_outcome':
-                    response = await api.fetchLearningOutcomes(instituteId);
-                    return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
-                case 'academic_calendar':
-                    response = await api.fetchAcademicCalendars(instituteId);
-                    return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
-                case 'event':
-                    response = await api.fetchEvents(instituteId);
-                    return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
-                default:
-                    return [];
-            }
-        } catch (error) {
-            console.error('Error fetching default fields:', error);
-            return [];
-        }
-    };
+    // const fetchDefaultFields = async (academicItemId) => {
+    //     try {
+    //         let response;
+    //         switch (academicItemId) {
+    //             case 'program':
+    //                 response = await api.fetchPrograms(instituteId);
+    //                 return response.data.map(item => ({ id: item.id, name: 'title', type: 'text', label: 'Title', value: item.title }));
+    //             case 'course':
+    //                 response = await api.fetchCourses(instituteId);
+    //                 return response.data.map(item => ({ id: item.id, name: 'title', type: 'text', label: 'Title', value: item.title }));
+    //             case 'assessment':
+    //                 response = await api.fetchAssessments(instituteId);
+    //                 return response.data.map(item => ({ id: item.id, name: 'title', type: 'text', label: 'Title', value: item.title }));
+    //             case 'batch':
+    //                 response = await api.fetchBatches(instituteId);
+    //                 return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
+    //             case 'semester':
+    //                 response = await api.fetchSemesters(instituteId);
+    //                 return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
+    //             case 'unit':
+    //                 response = await api.fetchUnits(instituteId);
+    //                 return response.data.map(item => ({ id: item.id, name: 'title', type: 'text', label: 'Title', value: item.title }));
+    //             case 'module':
+    //                 response = await api.fetchModules(instituteId);
+    //                 return response.data.map(item => ({ id: item.id, name: 'title', type: 'text', label: 'Title', value: item.title }));
+    //             case 'grading':
+    //                 response = await api.fetchGradings(instituteId);
+    //                 return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
+    //             case 'department':
+    //                 response = await api.fetchDepartments(instituteId);
+    //                 return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
+    //             case 'faculty':
+    //                 response = await api.fetchFaculties(instituteId);
+    //                 return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
+    //             case 'session':
+    //                 response = await api.fetchSessions(instituteId);
+    //                 return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
+    //             case 'section':
+    //                 response = await api.fetchSections(instituteId);
+    //                 return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
+    //             case 'class_year':
+    //                 response = await api.fetchClassYears(instituteId);
+    //                 return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
+    //             case 'classroom':
+    //                 response = await api.fetchClassrooms(instituteId);
+    //                 return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
+    //             case 'subject':
+    //                 response = await api.fetchSubjects(instituteId);
+    //                 return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
+    //             case 'curriculum':
+    //                 response = await api.fetchCurriculums(instituteId);
+    //                 return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
+    //             case 'learning_outcome':
+    //                 response = await api.fetchLearningOutcomes(instituteId);
+    //                 return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
+    //             case 'academic_calendar':
+    //                 response = await api.fetchAcademicCalendars(instituteId);
+    //                 return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
+    //             case 'event':
+    //                 response = await api.fetchEvents(instituteId);
+    //                 return response.data.map(item => ({ id: item.id, name: 'name', type: 'text', label: 'Name', value: item.name }));
+    //             default:
+    //                 return [];
+    //         }
+    //     } catch (error) {
+    //         console.error('Error fetching default fields:', error);
+    //         return [];
+    //     }
+    // };
 
     const handleItemSelect = (id) => {
         const updatedItems = academicItems.map(item =>

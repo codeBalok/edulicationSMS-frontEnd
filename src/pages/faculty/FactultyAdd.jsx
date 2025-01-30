@@ -1,11 +1,11 @@
 import React, {useEffect, useContext, useState} from 'react'
-import Sidebar from '../../components/SideBar'
+import Sidebar from '../../components/Sidebar'
 import HierarchyContext from '../../contexts/HierarchyContext'
 import api from '../../api'
 import { Link } from 'react-router-dom'
 import Nav from '../../components/Nav'
 import CustomFieldRender from '../../components/CustomFieldRender'
-
+import { showToast } from '../../utils/toastUtils'
 
 const FacultyAdd = () => {
 
@@ -18,6 +18,7 @@ const FacultyAdd = () => {
 
     const [customFields, setCustomFields] = useState();
     const [customFieldData, setCustomFieldsData] = useState({});
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         getParent()
@@ -62,24 +63,58 @@ const FacultyAdd = () => {
     }
     
     const getCustomField = async () => {
-        const response = await api.fetchCustomField("faculty")
-        setCustomFields(response?.data)
-        console.log("this is respnse of custom fields::::", response?.data)
-    }
-
-
-
-    const sendFaculty = async (data) => {
-        const response = await api.createFaculties(data);
-        if (response.status !== 201) {
-            alert("failed to add program")
+        try {  
+            const response = await api.fetchCustomField("faculty")
+            setCustomFields(response?.data)
+            console.log("this is respnse of custom fields::::", response?.data)
+        } catch (error) {
+            
         }
     }
 
-  
+    const validateForm = () => {
+    const newErrors = {};
+    
+    if (parent !== null && !parentId) {
+        newErrors.parentId = `${parent[0]?.model} is required`;
+    }
+    
+    if (!title.trim()) {
+        newErrors.title = 'Title is required';
+    }
+    
+    if (!shortcode.trim()) {
+        newErrors.shortcode = 'Shortcode is required';
+    }
+
+    // Custom field validations
+    customFields.forEach(field => {
+        const value = customFieldData[field.id] || '';
+        if (field.is_required && !value.trim()) {
+            newErrors[field.id] = `${field.name} is required`;
+        }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+   };
+    const sendFaculty = async (data) => {
+        try {     
+            const response = await api.createFaculties(data);
+            showToast('success', 'Created', 'Faculty created successfully!');
+            // if (response.status !== 201) {
+            //     alert("failed to add program")
+            // }
+        } catch (error) {
+            
+        }
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!validateForm()) {
+            return 0;
+        }
     
         const result = Object.entries(customFieldData).map(([id, value]) => ({
             id: parseInt(id), 
@@ -130,7 +165,14 @@ const FacultyAdd = () => {
                        ))            
                     }        
                 </select>
-            </div>)       
+            
+                    {
+                        errors?.parentId && (
+                                        <p className='mt-1 text-sm text-red-500'>{ errors?.parentId }</p>                
+                        )                
+                    }
+                </div>
+                )       
             }
             {/* Title Input */}
             <div className="mb-4">
@@ -145,6 +187,12 @@ const FacultyAdd = () => {
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                 />
+                
+                    {
+                        errors?.title && (
+                                        <p className='mt-1 text-sm text-red-500'>{ errors?.title }</p>                
+                        )                
+                    }        
             </div>
 
             {/* Shortcode Input */}
@@ -161,19 +209,17 @@ const FacultyAdd = () => {
                     onChange={(e) => setShortcode(e.target.value)}
                  >
                 </input>        
-                {/* <input
-                    id="shortcode"
-                    name="description"
-                    type="text"
-                    className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    value={description}
-                    onChange={(e) => setShortcode(e.target.value)}
-                /> */}
+                 {
+                        errors?.shortcode && (
+                                        <p className='mt-1 text-sm text-red-500'>{ errors?.shortcode }</p>                
+                        )                
+                    }
             </div>
              <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={customFieldData}       
+                    initialData={customFieldData} 
+                    errors={errors}    
                 />        
 
             {/* Save Button */}

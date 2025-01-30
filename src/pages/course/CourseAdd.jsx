@@ -37,6 +37,7 @@ const CourseAdd = () => {
 
   const [customFields, setCustomFields] = useState();
   const [customFieldData, setCustomFieldData] = useState({});
+  const [errors, setErrors] = useState({})
 
 
  const getCustomField = async () => {
@@ -66,9 +67,48 @@ const CourseAdd = () => {
        getParent()
        getCustomField()
     }, [])
+  
+   const validateForm = () => {
+    const newErrors = {};
+    
+    if (parent !== null && !parentId) {
+        newErrors.parentId = `${parent[0]?.model} is required`;
+    }
+    
+    if (!title.trim()) {
+        newErrors.title = 'Title is required';
+    }
+    if (!name.trim()) {
+        newErrors.name = 'Name is required';
+    }
+    if (!code.trim()) {
+        newErrors.code = 'Code is required';
+    }
+    if (!courseCategoryId .trim()) {
+        newErrors.courseCategoryId  = 'Course Category is required';
+    }
+    
+    if (!description.trim()) {
+        newErrors.description = 'Description is required';
+    }
+
+    // Custom field validations
+    customFields.forEach(field => {
+        const value = customFieldData[field.id] || '';
+        if (field.is_required && !value.trim()) {
+            newErrors[field.id] = `${field.name} is required`;
+        }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+    };
 
     const handleSubmit = (e) => {
       e.preventDefault();
+      if (!validateForm()) {
+        return;
+      }
       
       const result = Object.entries(customFieldData).map(([id, value]) => ({
             id: parseInt(id), 
@@ -130,6 +170,11 @@ const CourseAdd = () => {
               </option>
             ))}
           </select>
+          {
+            errors?.parentId && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.parentId }</p>    
+            )        
+          }      
         </div>
       )}
 
@@ -144,6 +189,11 @@ const CourseAdd = () => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
+      {
+            errors?.title && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.title }</p>    
+            )        
+          }       
       </div>
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
@@ -155,6 +205,11 @@ const CourseAdd = () => {
           value={code}
           onChange={(e) => setCode(e.target.value)}
         />
+        {
+            errors?.code && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.code }</p>    
+            )        
+          }            
       </div>
 
       <div className="mb-4">
@@ -167,6 +222,11 @@ const CourseAdd = () => {
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
+        {
+            errors?.name && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.name }</p>    
+            )        
+          }            
       </div>
 
       <div className="mb-4">
@@ -179,6 +239,11 @@ const CourseAdd = () => {
           value={courseCategoryId}
           onChange={(e) => setCourseCategoryId(e.target.value)}
         />
+        {
+            errors?.courseCategoryId && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.courseCategoryId }</p>    
+            )        
+          }            
       </div>
 
       <div className="mb-4">
@@ -351,7 +416,8 @@ const CourseAdd = () => {
       <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={customFieldData}       
+              initialData={customFieldData}  
+             errors={errors}
           /> 
       <div className="flex">
         <button

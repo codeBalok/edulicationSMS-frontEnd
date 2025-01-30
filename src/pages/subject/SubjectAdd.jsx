@@ -24,6 +24,7 @@ const SubjectAdd = () => {
 
   const [customFields, setCustomFields] = useState();
   const [customFieldData, setCustomFieldData] = useState({});
+  const [errors, setErrors] = useState({})
  
  const getCustomField = async () => {
         const response = await api.fetchCustomField("Subject")
@@ -52,9 +53,49 @@ const SubjectAdd = () => {
        getParent()
        getCustomField()
     }, [])
+  
+   const validateForm = () => {
+    const newErrors = {};
+    
+    if (parent !== null && !parentId) {
+        newErrors.parentId = `${parent[0]?.model} is required`;
+    }
+    
+    if (!title.trim()) {
+        newErrors.title = 'Title is required';
+    }
+    if (!code.trim()) {
+        newErrors.code = 'Code is required';
+    }
+    if (!creditHour?.trim()) {
+        newErrors.creditHour = 'Credit Hour is required';
+    }
+    // if (!courseCategoryId .trim()) {
+    //     newErrors.courseCategoryId  = 'Course Category is required';
+    // }
+    
+    if (!description.trim()) {
+        newErrors.description = 'Description is required';
+    }
+
+    // Custom field validations
+    customFields.forEach(field => {
+        const value = customFieldData[field.id] || '';
+        if (field.is_required && !value.trim()) {
+            newErrors[field.id] = `${field.name} is required`;
+        }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+    };
+ 
 
     const handleSubmit = (e) => {
       e.preventDefault();
+      if (!validateForm()) {
+        return;
+      }
       const result = Object.entries(customFieldData).map(([id, value]) => ({
             id: parseInt(id), 
             value,
@@ -108,6 +149,11 @@ const SubjectAdd = () => {
               </option>
             ))}
           </select>
+           {
+            errors?.parentId && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.parentId }</p>    
+            )        
+          }         
         </div>
       )}
   {/* Title Field */}
@@ -122,6 +168,11 @@ const SubjectAdd = () => {
       value={title}
       onChange={(e) => setTitle(e.target.value)}
     />
+     {
+            errors?.title && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.title }</p>    
+            )        
+          }             
   </div>
 
    {/* Code */}
@@ -135,6 +186,11 @@ const SubjectAdd = () => {
           value={code}
           onChange={(e) => setCode(e.target.value)}
         />
+         {
+            errors?.code && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.code }</p>    
+            )        
+          }         
       </div>
 
       {/* Credit Hour */}
@@ -148,6 +204,11 @@ const SubjectAdd = () => {
           value={creditHour}
           onChange={(e) => setCreditHour(Number(e.target.value))}
         />
+         {
+            errors?.creditHour && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.creditHour }</p>    
+            )        
+          }         
       </div>
 
       {/* Subject Type */}
@@ -161,6 +222,7 @@ const SubjectAdd = () => {
           value={subjectType}
           onChange={(e) => setSubjectType(Number(e.target.value))}
         />
+              
       </div>
 
       {/* Class Type */}
@@ -212,11 +274,17 @@ const SubjectAdd = () => {
       value={description}
       onChange={(e) => setDescription(e.target.value)}
     />
+     {
+            errors?.title && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.title }</p>    
+            )        
+          }             
   </div>
 <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={customFieldData}       
+              initialData={customFieldData} 
+             errors={errors}
           /> 
         
          
