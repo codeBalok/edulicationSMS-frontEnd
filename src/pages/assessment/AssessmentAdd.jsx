@@ -26,20 +26,21 @@ const AssessmentAdd = () => {
   const [instructions, setInstructions] = useState("");
   const [rubric, setRubric] = useState("");
   const [description, setDescription] = useState("");
+  const [customFields, setCustomFields] = useState();
+  const [customFieldData, setCustomFieldData] = useState({});
+  const [errors, setErrors] = useState({})
 
-    const [customFields, setCustomFields] = useState();
-    const [customFieldData, setCustomFieldData] = useState({});
+ 
 
-
- const getCustomField = async () => {
+  const getCustomField = async () => {
         const response = await api.fetchCustomField("Assessment")
         setCustomFields(response?.data)
         console.log("this is respnse of custom fields::::", response?.data)
-    }
+  }
 
   const handleFieldChange = (updatedData) => {
-        setCustomFieldData(updatedData); 
-    };
+    setCustomFieldData(updatedData); 
+  };
 
 
   
@@ -60,9 +61,43 @@ const AssessmentAdd = () => {
        getParent()
        getCustomField()
     }, [])
+  
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (parent !== null && !parentId) {
+        newErrors.parentId = `${parent[0]?.model} is required`;
+    }
+    
+    if (!title.trim()) {
+        newErrors.title = 'Title is required';
+    }
+  
+    if (!type.trim()) {
+        newErrors.type = 'Type is required';
+    }
+   
+    if (!description.trim()) {
+        newErrors.description = 'Description is required';
+    }
+
+    // Custom field validations
+    customFields.forEach(field => {
+        const value = customFieldData[field.id] || '';
+        if (field.is_required && !value.trim()) {
+            newErrors[field.id] = `${field.name} is required`;
+        }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
     const handleSubmit = (e) => {
       e.preventDefault();
+      if (!validateForm()) {
+        return;
+      }
       
       const result = Object.entries(customFieldData).map(([id, value]) => ({
             id: parseInt(id), 
@@ -121,6 +156,11 @@ const AssessmentAdd = () => {
               </option>
             ))}
           </select>
+          {
+            errors?.parentId && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.parentId}</p>        
+            )        
+          }      
         </div>
       )}
   {/* Title Field */}
@@ -135,6 +175,11 @@ const AssessmentAdd = () => {
       value={title}
       onChange={(e) => setTitle(e.target.value)}
     />
+     {
+        errors?.title && (
+          <p className='mt-1 text-sm text-red-500'>{ errors?.title}</p>        
+        )        
+      }              
   </div>
 
      {/* Type */}
@@ -152,6 +197,11 @@ const AssessmentAdd = () => {
           <option value="project">Project</option>
           <option value="quiz">Quiz</option>
         </select>
+         {
+        errors?.type && (
+          <p className='mt-1 text-sm text-red-500'>{ errors?.type}</p>        
+        )        
+      }        
       </div>
 
       {/* Total Marks */}
@@ -266,12 +316,18 @@ const AssessmentAdd = () => {
       value={description}
       onChange={(e) => setDescription(e.target.value)}
     />
+     {
+        errors?.description && (
+          <p className='mt-1 text-sm text-red-500'>{ errors?.description}</p>        
+        )        
+      }            
   </div>
 
    <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={customFieldData}       
+              initialData={customFieldData} 
+              errors={errors}
           />       
   {/* Submit Button */}
   <div className="flex">

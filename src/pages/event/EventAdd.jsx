@@ -13,8 +13,8 @@ const EventAdd = () => {
   const [parent, setParent] = useState(null);
   const [parentId, setParentId] = useState("");
     
-  const [title, setTitle] = useState("");
-  const [courseType, setCourseType] = useState("Online Training");
+const [title, setTitle] = useState("");
+const [courseType, setCourseType] = useState("Online Training");
 const [reportingState, setReportingState] = useState("Active");
 const [courseName, setCourseName] = useState("Advanced PHP");
 const [group, setGroup] = useState("Developers");
@@ -35,39 +35,71 @@ const [archive, setArchive] = useState("Archived");
 
   const [description, setDescription] = useState("");
 
-   const [customFields, setCustomFields] = useState();
-   const [customFieldData, setCustomFieldData] = useState({});
-   
-
- const getCustomField = async () => {
-        const response = await api.fetchCustomField("Event")
+  const [customFields, setCustomFields] = useState();
+  const [customFieldData, setCustomFieldData] = useState({});
+  
+  const [errors, setErrors] = useState({})
+  
+  
+  const getCustomField = async () => {
+    const response = await api.fetchCustomField("Event")
         setCustomFields(response?.data)
         console.log("this is respnse of custom fields::::", response?.data)
       }
       
       const handleFieldChange = (updatedData) => {
-              setCustomFieldData(updatedData); 
+        setCustomFieldData(updatedData); 
           };
   
     const getParent = async () => {
         const response = await api.fetchEventParent();
         setParent(response?.data.data)
         console.log("data from sem:",response)
-    }
+      }
 
-    const sendEvent = async (data) => {
+      const sendEvent = async (data) => {
         const response = await api.createEvent(data);
         if (response.status !== 201) {
             alert("failed to add program")
-        }
+          }
     }
 
     useEffect(() => {
-       getParent()
-        getCustomField()
+      getParent()
+      getCustomField()
     }, [])
-    const handleSubmit = (e) => {
-      e.preventDefault();
+  
+    const validateForm = () => {
+        const newErrors = {};
+        
+        if (parent !== null && !parentId) {
+            newErrors.parentId = `${parent[0]?.model} is required`;
+        }
+        
+        if (!title.trim()) {
+            newErrors.title = 'Title is required';
+        }
+       
+        if (!description.trim()) {
+            newErrors.description = 'Description is required';
+        }
+    
+        // Custom field validations
+        customFields.forEach(field => {
+            const value = customFieldData[field.id] || '';
+            if (field.is_required && !value.trim()) {
+                newErrors[field.id] = `${field.name} is required`;
+            }
+        });
+    
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+      };
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!validateForm()) {
+          return;
+        }
       
        const result = Object.entries(customFieldData).map(([id, value]) => ({
      id: parseInt(id), 
@@ -132,6 +164,11 @@ const [archive, setArchive] = useState("Archived");
               </option>
             ))}
           </select>
+          {
+            errors?.parentId && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.parentId}</p>        
+            )        
+          }        
         </div>
       )}
   {/* Title Field */}
@@ -146,6 +183,11 @@ const [archive, setArchive] = useState("Archived");
       value={title}
       onChange={(e) => setTitle(e.target.value)}
     />
+    {
+            errors?.title && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.title}</p>        
+            )        
+          }            
   </div>
 
     {/* Course Type */}
@@ -213,12 +255,18 @@ const [archive, setArchive] = useState("Archived");
       value={description}
       onChange={(e) => setDescription(e.target.value)}
     />
+    {
+            errors?.description && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.description}</p>        
+            )        
+          }            
   </div>
 
   <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={customFieldData}       
+              initialData={customFieldData}  
+              errors={errors}
                     /> 
             
   {/* Submit Button */}

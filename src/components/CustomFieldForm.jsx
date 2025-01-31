@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api';
 import { useParams } from 'react-router-dom';
+import { showToast } from '../utils/toastUtils';
 
 const CustomFieldForm = ({ onClose, instituteId }) => {
 
@@ -30,13 +31,10 @@ const CustomFieldForm = ({ onClose, instituteId }) => {
                 default_value: defaultValue,
                 description,
             };
-            console.log("fielsss:",data)
             await api.createCustomField(data);
-            alert('Custom field created successfully!');
-            onClose();
+            showToast('success', 'Created', 'Custom Field created successfully!');
         } catch (error) {
-            console.error('Error creating custom field:', error);
-            alert('Failed to create custom field.');
+            showToast('error', 'Error', 'Oops! Something went wrong');
         }
     };
 

@@ -1,5 +1,4 @@
 import axios from 'axios';
-// import { showToast } from '../utils/toastUtils';
 import { showToast } from '../utils/toastUtils';
 
 const http = axios.create({

@@ -15,13 +15,13 @@ const SectionAdd = () => {
   const [title, setTitle] = useState("");
   const [parentId, setParentId] = useState("");
   const [seat, setSeat] = useState("");
-  const [status, setStatus] = useState(1);
 
   const [customFields, setCustomFields] = useState();
-    const [customFieldData, setCustomFieldData] = useState({});
-    
- const getCustomField = async () => {
-        const response = await api.fetchCustomField("Section")
+  const [customFieldData, setCustomFieldData] = useState({});
+  const [errors, setErrors] = useState({})
+   
+   const getCustomField = async () => {
+     const response = await api.fetchCustomField("Section")
         setCustomFields(response?.data)
         console.log("this is respnse of custom fields::::", response?.data)
       }
@@ -31,26 +31,54 @@ const SectionAdd = () => {
           };
   
     const getParent = async () => {
-        const response = await api.fetchSectionParent();
-        setParent(response?.data.data)
+      const response = await api.fetchSectionParent();
+      setParent(response?.data.data)
         console.log("data from sem:",response)
     }
 
     const sendSection = async (data) => {
         const response = await api.createSection(data);
         if (response.status !== 201) {
-            alert("failed to add program")
+          alert("failed to add program")
         }
-    }
-
-    useEffect(() => {
-       getParent()
-       getCustomField()
-    }, [])
-
+      }
+      
+      useEffect(() => {
+        getParent()
+        getCustomField()
+      }, [])
+      
+      const validateForm = () => {
+          const newErrors = {};
+          
+          if (parent !== null && !parentId) {
+              newErrors.parentId = `${parent[0]?.model} is required`;
+          }
+          
+          if (!title.trim()) {
+              newErrors.title = 'Title is required';
+          }
+        
+          if (!seat.trim()) {
+              newErrors.seat = 'Seat is required';
+          }
+          // Custom field validations
+          customFields.forEach(field => {
+              const value = customFieldData[field.id] || '';
+              if (field.is_required && !value.trim()) {
+                  newErrors[field.id] = `${field.name} is required`;
+              }
+          });
+      
+          setErrors(newErrors);
+          return Object.keys(newErrors).length === 0;
+        };
+  
     const handleSubmit = (e) => {
       e.preventDefault();
-      
+        if (!validateForm()) {
+          return;
+        }
         const result = Object.entries(customFieldData).map(([id, value]) => ({
       id: parseInt(id), 
             value,
@@ -60,7 +88,6 @@ const SectionAdd = () => {
       const formData = {
             title,
             seat,
-            status,
             ...(parentId && parent && { parent_id: parentId }),
             custom_field: result
           }
@@ -100,6 +127,11 @@ const SectionAdd = () => {
               </option>
             ))}
           </select>
+          {
+            errors?.parentId && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.parentId}</p>        
+            )        
+          }      
         </div>
       )}
   {/* Title Field */}
@@ -114,6 +146,11 @@ const SectionAdd = () => {
       value={title}
       onChange={(e) => setTitle(e.target.value)}
     />
+    {
+            errors?.title && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.title}</p>        
+            )        
+          }            
   </div>
 
     {/* Seat Input */}
@@ -127,27 +164,18 @@ const SectionAdd = () => {
       value={seat}
       onChange={(e) => setSeat(e.target.value)}
     />
-  </div>
-
-  {/* Status Input */}
-  <div className="mb-4">
-    <label className="block text-sm font-medium text-gray-700">
-      Status<span className="text-red-500">*</span>
-    </label>
-    <select
-      className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-      value={status}
-      onChange={(e) => setStatus(e.target.value)}
-    >
-      <option value={1}>Active</option>
-      <option value={0}>Inactive</option>
-    </select>
+    {
+      errors?.seat && (
+        <p className='mt-1 text-sm text-red-500'>{ errors?.seat}</p>        
+      )        
+    }            
   </div>
 
  <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={customFieldData}       
+              initialData={customFieldData}  
+              errors={errors}
           />        
 
   {/* Submit Button */}

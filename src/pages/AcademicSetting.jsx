@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom/client';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import Item from '../components/Item';
 import api from '../api';
-import CustomFieldForm from '../components/CustomFieldForm';
-import CustomFieldList from '../components/CustomFieldList'
 import Sidebar from '../components/SideBar';
-import SettingsSidebar from '../components/SettingsSidebar';
 import AcademicSettingsSidebar from '../components/AcademicSettingsSidebar';
 import { FiSave } from "react-icons/fi";
+import { showToast } from '../utils/toastUtils';
 
 
 const AcademicSetting = () => {
@@ -163,15 +158,6 @@ const AcademicSetting = () => {
         }
     };
 
-    // const handleItemSelect = (id) => {
-    //     const updatedItems = academicItems.map(item =>
-    //         item.id === id ? { ...item, isSelected: !item.isSelected } : item
-    //     );
-    //     // setAcademicItems(updatedItems);
-    //     const selectedItems = updatedItems.filter(item => item.isSelected);
-    //     setSelectedItems(selectedItems);
-    // };
-
     const handleItemSelect = (id) => {
     const updatedItems = academicItems.map(item =>
         item.id === id ? { ...item, isSelected: !item.isSelected } : item
@@ -203,10 +189,9 @@ const AcademicSetting = () => {
             const hierarchyData = selectedItems.map(item => item.name);
             await api.createHierarchy(instituteId, { hierarchy: hierarchyData });
             setHierarchy(hierarchyData);
-            alert('Hierarchy saved successfully!');
+            showToast('success', 'Created', 'Hierarchy created successfully!');
         } catch (error) {
-            console.error('Error saving hierarchy:', error);
-            alert('Failed to save hierarchy.');
+            showToast('error', 'Error', 'Oops! Something went wrong');
         }
     };
 

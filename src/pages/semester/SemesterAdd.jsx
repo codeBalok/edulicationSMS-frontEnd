@@ -16,11 +16,11 @@ const SemesterAdd = () => {
   const [year, setYear] = useState("");
   const [parentId, setParentId] = useState("");
   const [customFields, setCustomFields] = useState();
-   const [customFieldData, setCustomFieldData] = useState({});
+  const [customFieldData, setCustomFieldData] = useState({});
+   const [errors, setErrors] = useState({})
    
-  
- const getCustomField = async () => {
-   const response = await api.fetchCustomField("Semester")
+   const getCustomField = async () => {
+     const response = await api.fetchCustomField("Semester")
         setCustomFields(response?.data)
         console.log("this is respnse of custom fields::::", response?.data)
     }
@@ -33,22 +33,51 @@ const SemesterAdd = () => {
         const response = await api.fetchSemesterParent();
         setParent(response?.data.data)
         console.log("data from sem:",response)
-    }
-
-    const sendSemester = async (data) => {
+      }
+      
+      const sendSemester = async (data) => {
         const response = await api.createSemester(data);
         if (response.status !== 201) {
-            alert("failed to add program")
+          alert("failed to add program")
         }
-    }
-
-    useEffect(() => {
-       getParent()
+      }
+      
+      useEffect(() => {
+        getParent()
        getCustomField()
     }, [])
-
-    const handleSubmit = (e) => {
-      e.preventDefault();
+    
+    const validateForm = () => {
+        const newErrors = {};
+        
+        if (parent !== null && !parentId) {
+            newErrors.parentId = `${parent[0]?.model} is required`;
+        }
+        
+        if (!title.trim()) {
+            newErrors.title = 'Title is required';
+        }
+      
+        if (!year.trim()) {
+            newErrors.year = 'Year is required';
+        }
+    
+        // Custom field validations
+        customFields.forEach(field => {
+            const value = customFieldData[field.id] || '';
+            if (field.is_required && !value.trim()) {
+                newErrors[field.id] = `${field.name} is required`;
+            }
+        });
+    
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+      };
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!validateForm()) {
+                return;
+              }
        const result = Object.entries(customFieldData).map(([id, value]) => ({
      id: parseInt(id), 
      value,
@@ -96,7 +125,12 @@ const SemesterAdd = () => {
                 {data?.title}
               </option>
             ))}
-          </select>
+        </select>
+        {
+          errors?.parentId && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.parentId}</p>          
+           )          
+        }        
         </div>
       )}
   {/* Title Field */}
@@ -111,6 +145,11 @@ const SemesterAdd = () => {
       value={title}
       onChange={(e) => setTitle(e.target.value)}
     />
+    {
+          errors?.title && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.title}</p>          
+           )          
+        }            
   </div>
 
   {/* Year Field */}
@@ -125,12 +164,18 @@ const SemesterAdd = () => {
       value={year}
       onChange={(e) => setYear(e.target.value)}
     />
+     {
+          errors?.year && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.year}</p>          
+           )          
+        }           
   </div>
             
            <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={customFieldData}       
+              initialData={customFieldData}  
+              errors={errors}
           /> 
 
   {/* Submit Button */}

@@ -22,10 +22,7 @@ const ClassRoomAdd = () => {
 
   const [customFields, setCustomFields] = useState();
   const [customFieldData, setCustomFieldData] = useState({});
-  
-
-  
-  
+  const [errors, setErrors] = useState({})
   
   const getCustomField = async () => {
     const response = await api.fetchCustomField("ClassRoom")
@@ -34,29 +31,68 @@ const ClassRoomAdd = () => {
   }
   
   const handleFieldChange = (updatedData) => {
-          setCustomFieldData(updatedData); 
-      };
+    setCustomFieldData(updatedData); 
+  };
   
-    const getParent = async () => {
-        const response = await api.fetchClassRoomParent();
-        setParent(response?.data.data)
-        console.log("data from sem:",response)
-    }
-
-    const sendSection = async (data) => {
-        const response = await api.createClassRoom(data);
-        if (response.status !== 201) {
+  const getParent = async () => {
+    const response = await api.fetchClassRoomParent();
+    setParent(response?.data.data)
+    console.log("data from sem:",response)
+  }
+  
+  const sendSection = async (data) => {
+    const response = await api.createClassRoom(data);
+    if (response.status !== 201) {
             alert("failed to add program")
-        }
+          }
     }
 
     useEffect(() => {
-       getParent()
-       getCustomField()
+      getParent()
+      getCustomField()
     }, [])
-
-    const handleSubmit = (e) => {
-      e.preventDefault();
+    
+    const validateForm = () => {
+        const newErrors = {};
+        
+        if (parent !== null && !parentId) {
+            newErrors.parentId = `${parent[0]?.model} is required`;
+        }
+        
+        if (!title.trim()) {
+            newErrors.title = 'Title is required';
+        }
+      
+        if (!capacity.trim()) {
+            newErrors.capacity = 'Capacity is required';
+        }
+        if (!floor.trim()) {
+            newErrors.floor = 'Floor is required';
+        }
+        if (!type.trim()) {
+            newErrors.type = 'Type is required';
+        }
+       
+        if (!description.trim()) {
+            newErrors.description = 'Description is required';
+        }
+    
+        // Custom field validations
+        customFields.forEach(field => {
+            const value = customFieldData[field.id] || '';
+            if (field.is_required && !value.trim()) {
+                newErrors[field.id] = `${field.name} is required`;
+            }
+        });
+    
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+      };
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!validateForm()) {
+                return;
+              }
       
        const result = Object.entries(customFieldData).map(([id, value]) => ({
             id: parseInt(id), 
@@ -108,6 +144,11 @@ const ClassRoomAdd = () => {
               </option>
             ))}
           </select>
+            {
+      errors?.parentId && (
+        <p className='mt-1 text-sm text-red-500'>{ errors?.parentId}</p>        
+      )        
+    }       
         </div>
       )}
   {/* Title Field */}
@@ -122,6 +163,11 @@ const ClassRoomAdd = () => {
       value={title}
       onChange={(e) => setTitle(e.target.value)}
     />
+     {
+      errors?.title && (
+        <p className='mt-1 text-sm text-red-500'>{ errors?.title}</p>        
+      )        
+    }               
   </div>
 
     {/* Floor Input */}
@@ -135,6 +181,11 @@ const ClassRoomAdd = () => {
       value={floor}
       onChange={(e) => setFloor(e.target.value)}
     />
+     {
+      errors?.floor && (
+        <p className='mt-1 text-sm text-red-500'>{ errors?.floor}</p>        
+      )        
+    }               
   </div>
 
   {/* Capacity Input */}
@@ -148,6 +199,11 @@ const ClassRoomAdd = () => {
       value={capacity}
       onChange={(e) => setCapacity(e.target.value)}
     />
+     {
+      errors?.capacity && (
+        <p className='mt-1 text-sm text-red-500'>{ errors?.capacity}</p>        
+      )        
+    }               
   </div>
 
     {/* Type Input */}
@@ -161,6 +217,11 @@ const ClassRoomAdd = () => {
       value={type}
       onChange={(e) => setType(e.target.value)}
     />
+     {
+      errors?.type && (
+        <p className='mt-1 text-sm text-red-500'>{ errors?.type}</p>        
+      )        
+    }               
   </div>
 
   {/* Description Input */}
@@ -173,12 +234,18 @@ const ClassRoomAdd = () => {
       value={description}
       onChange={(e) => setDescription(e.target.value)}
     />
+     {
+      errors?.description && (
+        <p className='mt-1 text-sm text-red-500'>{ errors?.description}</p>        
+      )        
+    }               
   </div>
 
  <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={customFieldData}       
+              initialData={customFieldData}  
+              errors={errors}
                     />    
   {/* Submit Button */}
   <div className="flex">

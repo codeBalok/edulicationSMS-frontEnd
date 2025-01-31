@@ -19,37 +19,72 @@ const BatchAdd = () => {
 
   const [customFields, setCustomFields] = useState();
   const [customFieldData, setCustomFieldData] = useState({});
-
- const getCustomField = async () => {
-        const response = await api.fetchCustomField("Batch")
-        setCustomFields(response?.data)
-        console.log("this is respnse of custom fields::::", response?.data)
-  }
-  
-  const handleFieldChange = (updatedData) => {
-        setCustomFieldData(updatedData); 
-    };
-  
-    const getParent = async () => {
-        const response = await api.fetchBatchParent();
-        setParent(response?.data.data)
-        console.log(response)
+   const [errors, setErrors] = useState({})
+   
+   
+   const getCustomField = async () => {
+     const response = await api.fetchCustomField("Batch")
+     setCustomFields(response?.data)
+     console.log("this is respnse of custom fields::::", response?.data)
     }
-
+    
+    const handleFieldChange = (updatedData) => {
+      setCustomFieldData(updatedData); 
+    };
+    
+    const getParent = async () => {
+      const response = await api.fetchBatchParent();
+      setParent(response?.data.data)
+      console.log(response)
+    }
+    
     const sendBatch = async (data) => {
-        const response = await api.createBatch(data);
-        if (response.status !== 201) {
-            alert("failed to add program")
+      const response = await api.createBatch(data);
+      if (response.status !== 201) {
+          alert("failed to add program")
         }
     }
-
+    
     useEffect(() => {
-       getParent()
-       getCustomField()
+      getParent()
+      getCustomField()
     }, [])
-
+    
+    const validateForm = () => {
+      const newErrors = {};
+      
+      if (parent !== null && !parentId) {
+          newErrors.parentId = `${parent[0]?.model} is required`;
+      }
+      
+      if (!title.trim()) {
+          newErrors.title = 'Title is required';
+      }
+    
+      // if (!learningHours.trim()) {
+      //     newErrors.learningHours = 'Learning Hour is required';
+      // }
+     
+      // if (!description.trim()) {
+      //     newErrors.description = 'Description is required';
+      // }
+  
+      // Custom field validations
+      customFields.forEach(field => {
+          const value = customFieldData[field.id] || '';
+          if (field.is_required && !value.trim()) {
+              newErrors[field.id] = `${field.name} is required`;
+          }
+      });
+  
+      setErrors(newErrors);
+      return Object.keys(newErrors).length === 0;
+    };
     const handleSubmit = (e) => {
       e.preventDefault();
+      if (!validateForm()) {
+              return;
+            }
       
        const result = Object.entries(customFieldData).map(([id, value]) => ({
             id: parseInt(id), 
@@ -97,6 +132,11 @@ const BatchAdd = () => {
               </option>
             ))}
           </select>
+           {
+                  errors?.parentId && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.parentId}</p>
+                  )
+                }         
         </div>
       )}
 
@@ -110,6 +150,11 @@ const BatchAdd = () => {
           value={title}
           onChange={(e) => setTtitle(e.target.value)}
         />
+         {
+                  errors?.title && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.title}</p>
+                  )
+                }         
       </div>
 
      <div className="mb-4">
@@ -128,7 +173,8 @@ const BatchAdd = () => {
 <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={customFieldData}       
+              initialData={customFieldData}  
+              errors={errors}
           /> 
       <div className="flex">
         <button

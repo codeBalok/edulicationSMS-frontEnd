@@ -14,17 +14,19 @@ const GradingAdd = () => {
   const [parentId, setParentId] = useState("");
     
   const [title, setTitle] = useState("");
-  const [gradePoints, setGradePoints] = useState();
+  const [gradePoints, setGradePoints] = useState("");
   const [minMarks, setMinMarks] = useState();
   const [maxMarks, setMaxMarks] = useState();
   const [gradeLetter, setGradeLetter] = useState("");
   const [gradeDescription, setGradeDescription] = useState("");
-  const [gradeValue, setGradeValue] = useState();
+  const [gradeValue, setGradeValue] = useState("");
   const [gradeRange, setGradeRange] = useState("");
   const [description, setDescription] = useState("");
 
-   const [customFields, setCustomFields] = useState();
-   const [customFieldData, setCustomFieldData] = useState({});
+  const [customFields, setCustomFields] = useState();
+  const [customFieldData, setCustomFieldData] = useState({});
+  const [errors, setErrors] = useState({})
+
    
                     const getCustomField = async () => {
                       const response = await api.fetchCustomField("Grading")
@@ -58,9 +60,49 @@ const GradingAdd = () => {
        getParent()
        getCustomField()
     }, [])
+  
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (parent !== null && !parentId) {
+        newErrors.parentId = `${parent[0]?.model} is required`;
+    }
+    
+    if (!title.trim()) {
+        newErrors.title = 'Title is required';
+    }
+  
+    if (!gradePoints.trim()) {
+        newErrors.gradePoints = 'Grade Points is required';
+    }
+    if (!gradeLetter.trim()) {
+        newErrors.gradeLetter = 'Grade Letter is required';
+    }
+    if (!gradeValue.trim()) {
+        newErrors.gradeValue = 'Grade value is required';
+    }
+   
+    if (!description.trim()) {
+        newErrors.description = 'Description is required';
+    }
+
+    // Custom field validations
+    customFields.forEach(field => {
+        const value = customFieldData[field.id] || '';
+        if (field.is_required && !value.trim()) {
+            newErrors[field.id] = `${field.name} is required`;
+        }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
     const handleSubmit = (e) => {
       e.preventDefault();
+      if (!validateForm()) {
+        return;
+      }
       
       const result = Object.entries(customFieldData).map(([id, value]) => ({
      id: parseInt(id), 
@@ -115,6 +157,11 @@ const GradingAdd = () => {
               </option>
             ))}
           </select>
+          {
+            errors?.parentId && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.parentId}</p>        
+             )        
+          }      
         </div>
       )}
   {/* Title Field */}
@@ -129,6 +176,11 @@ const GradingAdd = () => {
       value={title}
       onChange={(e) => setTitle(e.target.value)}
     />
+    {
+            errors?.title && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.title}</p>        
+             )        
+          }            
   </div>
 
      {/* Grade Points */}
@@ -142,6 +194,11 @@ const GradingAdd = () => {
           value={gradePoints}
           onChange={(e) => setGradePoints(Number(e.target.value))}
         />
+         {
+            errors?.gradePoints && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.gradePoints}</p>        
+             )        
+          }      
       </div>
 
       {/* Min Marks */}
@@ -181,6 +238,11 @@ const GradingAdd = () => {
           value={gradeLetter}
           onChange={(e) => setGradeLetter(e.target.value)}
         />
+         {
+            errors?.gradeLetter && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.gradeLetter}</p>        
+             )        
+          }      
       </div>
 
       {/* Grade Value */}
@@ -194,6 +256,11 @@ const GradingAdd = () => {
           value={gradeValue}
           onChange={(e) => setGradeValue(Number(e.target.value))}
         />
+         {
+            errors?.gradeValue && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.gradeValue}</p>        
+             )        
+          }      
       </div>
 
       {/* Grade Range */}
@@ -219,12 +286,18 @@ const GradingAdd = () => {
       value={description}
       onChange={(e) => setDescription(e.target.value)}
     />
+     {
+            errors?.description && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.description}</p>        
+             )        
+          }          
   </div>
 
    <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={customFieldData}       
+              initialData={customFieldData}   
+              errors={errors}
                     /> 
             
   {/* Submit Button */}

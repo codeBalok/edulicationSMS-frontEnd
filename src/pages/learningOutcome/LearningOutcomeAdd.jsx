@@ -21,7 +21,8 @@ const LearningOutcomeAdd = () => {
   const [description, setDescription] = useState("");
 
   const [customFields, setCustomFields] = useState();
-   const [customFieldData, setCustomFieldData] = useState({});
+  const [customFieldData, setCustomFieldData] = useState({});
+  const [errors, setErrors] = useState({}) 
 
  const getCustomField = async () => {
    const response = await api.fetchCustomField("LearningOutcome")
@@ -50,9 +51,50 @@ const LearningOutcomeAdd = () => {
        getParent()
        getCustomField()
     }, [])
+  
+   const validateForm = () => {
+    const newErrors = {};
+    
+    if (parent !== null && !parentId) {
+        newErrors.parentId = `${parent[0]?.model} is required`;
+    }
+    
+    if (!title.trim()) {
+        newErrors.title = 'Title is required';
+    }
+  
+    // if (!startDate.trim()) {
+    //     newErrors.startDate = 'Start Date is required';
+    // }
+    // if (!endDate.trim()) {
+    //     newErrors.endDate = 'End Date is required';
+    // }
+    // if (!courses.trim()) {
+    //     newErrors.courses = 'Courses is required';
+    // }
+   
+    if (!description.trim()) {
+        newErrors.description = 'Description is required';
+    }
+
+    // Custom field validations
+    customFields.forEach(field => {
+        const value = customFieldData[field.id] || '';
+        if (field.is_required && !value.trim()) {
+            newErrors[field.id] = `${field.name} is required`;
+        }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
     const handleSubmit = (e) => {
       e.preventDefault();
+
+      if (!validateForm()) {
+            return;
+      }
       
        const result = Object.entries(customFieldData).map(([id, value]) => ({
             id: parseInt(id), 
@@ -106,6 +148,11 @@ const LearningOutcomeAdd = () => {
               </option>
             ))}
           </select>
+          {
+              errors?.parentId && (
+                <p className='mt-1 text-sm text-red-500'>{errors?.parentId}</p>        
+        )        
+      }       
         </div>
       )}
   {/* Title Field */}
@@ -119,7 +166,12 @@ const LearningOutcomeAdd = () => {
       className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
       value={title}
       onChange={(e) => setTitle(e.target.value)}
-    />
+              />
+              {
+      errors?.title && (
+        <p className='mt-1 text-sm text-red-500'>{errors?.title}</p>        
+        )        
+      } 
   </div>
 
     {/* Level Selection */}
@@ -201,13 +253,19 @@ const LearningOutcomeAdd = () => {
       className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
       value={description}
       onChange={(e) => setDescription(e.target.value)}
-    />
+              />
+              {
+      errors?.description && (
+        <p className='mt-1 text-sm text-red-500'>{errors?.description}</p>        
+        )        
+      } 
   </div>
          
  <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={customFieldData}       
+              initialData={customFieldData}   
+              errors={errors}
                     /> 
 
   {/* Submit Button */}

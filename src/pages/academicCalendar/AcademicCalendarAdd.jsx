@@ -17,15 +17,18 @@ const AcademicCalendarAdd = () => {
   const [title, setTitle] = useState("");
   const [startDate, setStartDate] = useState("2025-01-01");
   const [endDate, setEndDate] = useState("2025-12-31");
-  const [academicYear, setAcademicYear] = useState("2025-2026");
+  const [academicYear, setAcademicYear] = useState("");
   const [holidays, setHolidays] = useState("Easter on 2025-04-14");
   const [events, setEvents] = useState("Sports Day on 2025-06-01");
   const [terms, setTerms] = useState("Spring term from 2025-01-01 to 2025-05-31");
 
   const [description, setDescription] = useState("");
 
-   const [customFields, setCustomFields] = useState();
+  const [customFields, setCustomFields] = useState();
   const [customFieldData, setCustomFieldData] = useState({});
+  const [errors, setErrors] = useState({})
+
+
 
 
  const getCustomField = async () => {
@@ -56,9 +59,44 @@ const AcademicCalendarAdd = () => {
       getParent()
       getCustomField()
     }, [])
+  
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (parent !== null && !parentId) {
+        newErrors.parentId = `${parent[0]?.model} is required`;
+    }
+    
+    if (!title.trim()) {
+        newErrors.title = 'Title is required';
+    }
+  
+    if (!academicYear.trim()) {
+        newErrors.academicYear = 'Academic Year is required';
+    }
+   
+    if (!description.trim()) {
+        newErrors.description = 'Description is required';
+    }
 
-    const handleSubmit = (e) => {
-      e.preventDefault();
+    // Custom field validations
+    customFields.forEach(field => {
+        const value = customFieldData[field.id] || '';
+        if (field.is_required && !value.trim()) {
+            newErrors[field.id] = `${field.name} is required`;
+        }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+        return;
+    }
       const result = Object.entries(customFieldData).map(([id, value]) => ({
             id: parseInt(id), 
             value,
@@ -112,7 +150,12 @@ const AcademicCalendarAdd = () => {
                 {data?.title}
               </option>
             ))}
-          </select>
+                </select>
+                {
+                  errors?.parentId && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.parentId}</p>
+                  )
+                }
         </div>
       )}
   {/* Title Field */}
@@ -127,6 +170,11 @@ const AcademicCalendarAdd = () => {
       value={title}
       onChange={(e) => setTitle(e.target.value)}
     />
+    {
+                  errors?.title && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.title}</p>
+                  )
+                }          
   </div>
 
    {/* Start Date */}
@@ -167,6 +215,11 @@ const AcademicCalendarAdd = () => {
           onChange={(e) => setAcademicYear(e.target.value)}
           placeholder="Enter academic year, e.g., 2025-2026"
         />
+        {
+                  errors?.academicYear && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.academicYear}</p>
+                  )
+                }         
       </div>
 
       {/* Holidays */}
@@ -217,13 +270,19 @@ const AcademicCalendarAdd = () => {
       className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
       value={description}
       onChange={(e) => setDescription(e.target.value)}
-    />
+              />
+              {
+                  errors?.description && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.description}</p>
+                  )
+                }   
   </div>
             
    <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={customFieldData}       
+              initialData={customFieldData}   
+              errors={errors}
           />           
   {/* Submit Button */}
   <div className="flex">

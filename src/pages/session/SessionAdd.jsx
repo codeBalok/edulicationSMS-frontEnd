@@ -14,7 +14,7 @@ const SessionAdd = () => {
     const [parent, setParent] = useState(null);
     const [parentId, setParentId] = useState('');
     
-   const [title, setTitle] = useState("");
+  const [title, setTitle] = useState("");
   const [eventId, setEventId] = useState("");
   const [location, setLocation] = useState("");
   const [rooms, setRooms] = useState("");
@@ -28,9 +28,9 @@ const SessionAdd = () => {
   const [dftEndAmPm, setDftEndAmPm] = useState("AM");
   const [customFields, setCustomFields] = useState();
   const [customFieldData, setCustomFieldData] = useState({});
+  const [errors, setErrors] = useState({})
    
-
- const getCustomField = async () => {
+   const getCustomField = async () => {
         const response = await api.fetchCustomField("Session")
         setCustomFields(response?.data)
         console.log("this is respnse of custom fields::::", response?.data)
@@ -38,27 +38,51 @@ const SessionAdd = () => {
     
     const handleFieldChange = (updatedData) => {
             setCustomFieldData(updatedData); 
-        };
-    const getParent = async () => {
+          };
+          const getParent = async () => {
         const response = await api.fetchSessionParent();
         setParent(response?.data.data)
         console.log(response)
-    }
-
-    const sendSession = async (data) => {
+      }
+      
+      const sendSession = async (data) => {
         const response = await api.createSession(data);
         if (response.status !== 201) {
-            alert("failed to add program")
+          alert("failed to add program")
         }
-    }
-
-    useEffect(() => {
-       getParent()
-       getCustomField()
-    }, [])
-
-    const handleSubmit = (e) => {
-      e.preventDefault();
+      }
+      
+      useEffect(() => {
+        getParent()
+        getCustomField()
+      }, [])
+      
+      const validateForm = () => {
+          const newErrors = {};
+          
+          if (parent !== null && !parentId) {
+              newErrors.parentId = `${parent[0]?.model} is required`;
+          }
+          
+          if (!title.trim()) {
+              newErrors.title = 'Title is required';
+          }
+          // Custom field validations
+          customFields.forEach(field => {
+              const value = customFieldData[field.id] || '';
+              if (field.is_required && !value.trim()) {
+                  newErrors[field.id] = `${field.name} is required`;
+              }
+          });
+      
+          setErrors(newErrors);
+          return Object.keys(newErrors).length === 0;
+        };
+        const handleSubmit = (e) => {
+          e.preventDefault();
+          if (!validateForm()) {
+                  return;
+                }
       
       const result = Object.entries(customFieldData).map(([id, value]) => ({
      id: parseInt(id), 
@@ -117,6 +141,11 @@ const SessionAdd = () => {
               </option>
             ))}
           </select>
+          {
+                  errors?.parentId && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.parentId }</p>        
+            )        
+          }      
         </div>
       )}
   <div className="mb-4">
@@ -135,7 +164,12 @@ const SessionAdd = () => {
       className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
       value={title}
       onChange={(e) => setTitle(e.target.value)}
-    />
+              />
+              {
+                  errors?.title && (
+                    <p className='mt-1 text-sm text-red-500'>{ errors?.title }</p>        
+            )        
+          }  
   </div>
 
   {/* Location */}
@@ -237,7 +271,8 @@ const SessionAdd = () => {
  <CustomFieldRender
                     customFields={customFields}  
                     onFieldChange={handleFieldChange} 
-                    initialData={customFieldData}       
+              initialData={customFieldData}  
+              errors={errors}
                     /> 
             
   {/* Submit Button */}

@@ -1,5 +1,5 @@
 import React, {useEffect, useContext, useState} from 'react'
-import Sidebar from '../../components/Sidebar'
+import Sidebar from '../../components/SideBar'
 import HierarchyContext from '../../contexts/HierarchyContext'
 import api from '../../api'
 import { Link } from 'react-router-dom'
@@ -102,9 +102,6 @@ const FacultyAdd = () => {
         try {     
             const response = await api.createFaculties(data);
             showToast('success', 'Created', 'Faculty created successfully!');
-            // if (response.status !== 201) {
-            //     alert("failed to add program")
-            // }
         } catch (error) {
             
         }
