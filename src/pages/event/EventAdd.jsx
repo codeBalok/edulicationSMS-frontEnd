@@ -5,6 +5,8 @@ import api from '../../api'
 import { Link } from 'react-router-dom'
 import Nav from '../../components/Nav'
 import CustomFieldRender from '../../components/CustomFieldRender'
+import { showToast } from '../../utils/toastUtils'
+import React from 'react'
  
 
 const EventAdd = () => {
@@ -57,11 +59,14 @@ const [archive, setArchive] = useState("Archived");
         console.log("data from sem:",response)
       }
 
-      const sendEvent = async (data) => {
-        const response = await api.createEvent(data);
-        if (response.status !== 201) {
-            alert("failed to add program")
-          }
+  const sendEvent = async (data) => {
+        try {
+          const response = await api.createEvent(data);
+            showToast('success', 'Created', 'Event created successfully!');
+
+        } catch (error) {
+          
+        }
     }
 
     useEffect(() => {

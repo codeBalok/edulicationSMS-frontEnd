@@ -5,6 +5,8 @@ import api from '../../api'
 import { Link } from 'react-router-dom'
 import Nav from '../../components/Nav'
 import CustomFieldRender from '../../components/CustomFieldRender'
+import { showToast } from '../../utils/toastUtils'
+import React from 'react'
   
 
 const SectionAdd = () => {
@@ -36,11 +38,13 @@ const SectionAdd = () => {
         console.log("data from sem:",response)
     }
 
-    const sendSection = async (data) => {
+  const sendSection = async (data) => {
+      try {
         const response = await api.createSection(data);
-        if (response.status !== 201) {
-          alert("failed to add program")
-        }
+        showToast('success', 'Created', 'Section created successfully!');
+      } catch (error) {
+        
+      }
       }
       
       useEffect(() => {

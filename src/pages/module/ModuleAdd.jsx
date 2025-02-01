@@ -5,6 +5,8 @@ import api from '../../api'
 import { Link } from 'react-router-dom'
 import Nav from '../../components/Nav'
 import CustomFieldRender from '../../components/CustomFieldRender'
+import { showToast } from '../../utils/toastUtils'
+import React from 'react'
 
 
 const ModuleAdd = () => {
@@ -41,12 +43,15 @@ const ModuleAdd = () => {
         console.log("data from sem:",response)
     }
 
-    const sendModule = async (data) => {
+  const sendModule = async (data) => {
+      try {
         const response = await api.createModule(data);
-        if (response.status !== 201) {
-            alert("failed to add program")
-        }
-    }
+        showToast('success', 'Created', 'Module created successfully!');
+
+      } catch (error) {
+        
+      }
+      }
 
     useEffect(() => {
        getParent()

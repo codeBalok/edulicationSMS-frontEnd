@@ -5,6 +5,7 @@ import api from '../../api'
 import { Link } from 'react-router-dom'
 import Nav from '../../components/Nav'
 import CustomFieldRender from '../../components/CustomFieldRender'
+import { showToast } from '../../utils/toastUtils'
   
 
 
@@ -56,11 +57,13 @@ const CourseAdd = () => {
         console.log(response)
     }
 
-    const sendCourse = async (data) => {
+  const sendCourse = async (data) => {
+      try {
         const response = await api.createCourse(data);
-        if (response.status !== 201) {
-            alert("failed to add program")
-        }
+        showToast('success', 'Created', 'Course created successfully!');
+      } catch (error) {
+        
+      }
     }
 
     useEffect(() => {

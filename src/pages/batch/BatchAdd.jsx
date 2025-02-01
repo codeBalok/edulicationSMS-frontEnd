@@ -5,6 +5,7 @@ import api from '../../api'
 import { Link } from 'react-router-dom'
 import Nav from '../../components/Nav'
 import CustomFieldRender from '../../components/CustomFieldRender'
+import { showToast } from '../../utils/toastUtils'
 
 
 const BatchAdd = () => {
@@ -38,11 +39,13 @@ const BatchAdd = () => {
       console.log(response)
     }
     
-    const sendBatch = async (data) => {
-      const response = await api.createBatch(data);
-      if (response.status !== 201) {
-          alert("failed to add program")
-        }
+  const sendBatch = async (data) => {
+      try {
+        const response = await api.createBatch(data);
+        showToast('success', 'Created', 'Batch created successfully!');
+      } catch (error) {
+        
+      }
     }
     
     useEffect(() => {

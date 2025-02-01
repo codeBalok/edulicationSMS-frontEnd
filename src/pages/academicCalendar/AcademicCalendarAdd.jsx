@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 // import Nav from './Nav'
 import Nav from '../../components/Nav'
 import CustomFieldRender from '../../components/CustomFieldRender'
+import { showToast } from '../../utils/toastUtils'
 
 
 const AcademicCalendarAdd = () => {
@@ -48,11 +49,13 @@ const AcademicCalendarAdd = () => {
         console.log("data from sem:",response)
     }
 
-    const sendAcademicCalendar = async (data) => {
+  const sendAcademicCalendar = async (data) => {
+      try {
         const response = await api.createAcademicCalendar(data);
-        if (response.status !== 201) {
-            alert("failed to add program")
-        }
+         showToast('success', 'Created', 'Academic Calendar created successfully!');
+      } catch (error) {
+        
+      }
     }
 
     useEffect(() => {

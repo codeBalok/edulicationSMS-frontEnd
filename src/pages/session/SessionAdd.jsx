@@ -5,6 +5,8 @@ import api from '../../api'
 import { Link } from 'react-router-dom'
 import Nav from '../../components/Nav'
 import CustomFieldRender from '../../components/CustomFieldRender'
+import React from 'react'
+import { showToast } from '../../utils/toastUtils'
  
           
 const SessionAdd = () => {
@@ -45,10 +47,12 @@ const SessionAdd = () => {
         console.log(response)
       }
       
-      const sendSession = async (data) => {
-        const response = await api.createSession(data);
-        if (response.status !== 201) {
-          alert("failed to add program")
+  const sendSession = async (data) => {
+        try {
+          const response = await api.createSession(data);
+          showToast('success', 'Created', 'Session created successfully!');
+        } catch (error) {
+          
         }
       }
       

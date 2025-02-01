@@ -5,6 +5,8 @@ import api from '../../api'
 import { Link } from 'react-router-dom'
 import Nav from '../../components/Nav'
 import CustomFieldRender from '../../components/CustomFieldRender'
+import { showToast } from '../../utils/toastUtils'
+import React from 'react'
   
 
 const SubjectAdd = () => {
@@ -42,11 +44,13 @@ const SubjectAdd = () => {
         console.log("data from sem:",response)
     }
 
-    const sendSubject = async (data) => {
+  const sendSubject = async (data) => {
+      try {
         const response = await api.createSubject(data);
-        if (response.status !== 201) {
-            alert("failed to add program")
-        }
+        showToast('success', 'Created', 'Subject created successfully!');
+      } catch (error) {
+        
+      }
     }
 
     useEffect(() => {

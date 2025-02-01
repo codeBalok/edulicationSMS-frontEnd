@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 import Nav from '../../components/Nav'
 
 import CustomFieldRender from '../../components/CustomFieldRender'
+import { showToast } from '../../utils/toastUtils'
 
 
 const AssessmentAdd = () => {
@@ -50,11 +51,13 @@ const AssessmentAdd = () => {
         console.log("data from sem:",response)
     }
 
-    const sentAssessment = async (data) => {
+  const sentAssessment = async (data) => {
+      try {
         const response = await api.createAssessment(data);
-        if (response.status !== 201) {
-            alert("failed to add program")
-        }
+        showToast('success', 'Created', 'Assessment created successfully!');
+      } catch (error) {
+        
+      }
     }
 
     useEffect(() => {

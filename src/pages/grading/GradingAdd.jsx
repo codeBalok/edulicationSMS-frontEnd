@@ -5,6 +5,7 @@ import api from '../../api'
 import { Link } from 'react-router-dom'
 import Nav from '../../components/Nav'
 import CustomFieldRender from '../../components/CustomFieldRender'
+import { showToast } from '../../utils/toastUtils'
  
 
 const GradingAdd = () => {
@@ -49,11 +50,14 @@ const GradingAdd = () => {
             setCustomFieldData(updatedData); 
         };
     
-    const sentGrading = async (data) => {
+  const sentGrading = async (data) => {
+      try {
         const response = await api.createGrading(data);
-        if (response.status !== 201) {
-            alert("failed to add program")
-        }
+        showToast('success', 'Created', 'Grading created successfully!');
+        
+      } catch (error) {
+        
+      }
     }
 
     useEffect(() => {

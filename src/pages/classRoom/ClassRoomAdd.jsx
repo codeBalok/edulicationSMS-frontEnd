@@ -5,6 +5,7 @@ import api from '../../api'
 import { Link } from 'react-router-dom'
 import Nav from '../../components/Nav'
 import CustomFieldRender from '../../components/CustomFieldRender'
+import { showToast } from '../../utils/toastUtils'
   
 
 
@@ -41,10 +42,12 @@ const ClassRoomAdd = () => {
   }
   
   const sendSection = async (data) => {
-    const response = await api.createClassRoom(data);
-    if (response.status !== 201) {
-            alert("failed to add program")
-          }
+    try {
+      const response = await api.createClassRoom(data);
+      showToast('success', 'Created', 'Section created successfully!');
+    } catch (error) {
+      
+    }
     }
 
     useEffect(() => {

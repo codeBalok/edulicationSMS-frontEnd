@@ -5,6 +5,8 @@ import api from '../../api'
 import { Link } from 'react-router-dom'
 import Nav from '../../components/Nav'
 import CustomFieldRender from '../../components/CustomFieldRender'
+import { showToast } from '../../utils/toastUtils'
+import React from 'react'
 
 
 const SemesterAdd = () => {
@@ -35,10 +37,12 @@ const SemesterAdd = () => {
         console.log("data from sem:",response)
       }
       
-      const sendSemester = async (data) => {
-        const response = await api.createSemester(data);
-        if (response.status !== 201) {
-          alert("failed to add program")
+  const sendSemester = async (data) => {
+        try {
+          const response = await api.createSemester(data);
+          showToast('success', 'Created', 'Semester created successfully!');
+        } catch (error) {
+          
         }
       }
       

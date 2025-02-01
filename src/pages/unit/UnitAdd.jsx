@@ -5,6 +5,8 @@ import api from '../../api'
 import { Link } from 'react-router-dom'
 import Nav from '../../components/Nav'
 import CustomFieldRender from '../../components/CustomFieldRender'
+import { showToast } from '../../utils/toastUtils'
+import React from 'react'
 
 const UnitAdd = () => {
 
@@ -42,11 +44,13 @@ const UnitAdd = () => {
     }
 
     const sendUnit = async (data) => {
+      try {
         const response = await api.createUnit(data);
-        if (response.status !== 200 || response.status !== 200) {
-            alert("failed to add program")
-        }
-    }
+        showToast('success', 'Created', 'Unit created successfully!');
+      } catch (error) {
+        
+      }
+      }
 
     useEffect(() => {
        getParent()

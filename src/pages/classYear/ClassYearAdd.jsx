@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 // import Nav from './Nav'
 import Nav from '../../components/Nav'
 import CustomFieldRender from '../../components/CustomFieldRender'
+import { showToast } from '../../utils/toastUtils'
 
 
 const ClassYearAdd = () => {
@@ -42,11 +43,13 @@ const ClassYearAdd = () => {
         console.log("data from sem:",response)
     }
 
-    const sendClassYear = async (data) => {
+  const sendClassYear = async (data) => {
+      try {
         const response = await api.createClassYear(data);
-        if (response.status !== 201) {
-            alert("failed to add program")
-        }
+        showToast('success', 'Created', 'Class year created successfully!');
+      } catch (error) {
+        
+      }
     }
 
     useEffect(() => {

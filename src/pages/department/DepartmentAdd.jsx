@@ -1,5 +1,5 @@
 import React, {useEffect, useContext, useState} from 'react'
-import Sidebar from '../../components/Sidebar'
+import Sidebar from '../../components/SideBar'
 import HierarchyContext from '../../contexts/HierarchyContext'
 import api from '../../api'
 import { Link } from 'react-router-dom'

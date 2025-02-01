@@ -5,6 +5,7 @@ import api from '../../api'
 import { Link } from 'react-router-dom'
 import Nav from '../../components/Nav'
 import CustomFieldRender from '../../components/CustomFieldRender'
+import { showToast } from '../../utils/toastUtils'
   
 
 const LearningOutcomeAdd = () => {
@@ -40,11 +41,13 @@ const LearningOutcomeAdd = () => {
         console.log("data from sem:",response)
     }
 
-    const sendLearningOutcomes = async (data) => {
+  const sendLearningOutcomes = async (data) => {
+      try {
         const response = await api.createLearningOutcome(data);
-        if (response.status !== 201) {
-            alert("failed to add program")
-        }
+        showToast('success', 'Created', 'Learning Outcomes created successfully!');
+      } catch (error) {
+        
+      }
     }
 
     useEffect(() => {
