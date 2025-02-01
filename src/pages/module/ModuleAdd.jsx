@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom'
 import Nav from '../../components/Nav'
 import CustomFieldRender from '../../components/CustomFieldRender'
 import { showToast } from '../../utils/toastUtils'
-import React from 'react'
 
 
 const ModuleAdd = () => {

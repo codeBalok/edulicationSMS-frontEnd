@@ -247,7 +247,7 @@ const App = () => {
             />
                 {/* Main Content */}
                 <main className="flex-1 p-6 overflow-y-auto">
-                    <CustomFieldForm academicItems = {academicItems} instituteId = '1' />
+                  
                 </main>
             </div>
     );

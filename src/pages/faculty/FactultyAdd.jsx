@@ -124,7 +124,7 @@ const FacultyAdd = () => {
             ...(parentId && parent && { parent_id: parentId }),
             custom_field: result
         }
-        // console.log("thisiss::",formData)
+        console.log("thisiss::",formData)
         sendFaculty(formData)
     };
 

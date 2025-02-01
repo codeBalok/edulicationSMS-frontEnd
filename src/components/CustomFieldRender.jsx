@@ -140,6 +140,23 @@ const CustomFieldRender = ({ customFields = [], initialData = {}, onFieldChange,
                         />
                     </div>
                 );
+            case 'file':
+                return (
+                    <div className="mb-4" key={id}>
+                        <label htmlFor={name} className="block text-sm font-medium text-gray-700">
+                            {name} {isRequired && <span className="text-red-500">*</span>}
+                        </label>
+                        <input
+                            id={id}
+                            type="file"
+                            name={name}
+                            className={inputClasses}
+                            onChange={handleChange}
+                            required={isRequired}
+                        />
+                        {fieldError && <p className="mt-1 text-sm text-red-500">{fieldError}</p>}
+                    </div>
+                );
             default:
                 return null;
         }
